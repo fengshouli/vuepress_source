@@ -1,5 +1,5 @@
 
-git init
+#git init
 git add deploy.sh docs/* package.json deploy_source.sh
 git commit -m '将源码发送到git'
 

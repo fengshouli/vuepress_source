@@ -1,14 +1,14 @@
-# 使用ssh的方式操作git
+# git相关操作
 > #### 优点:不用每次输入密码
 > #### 缺点:只能针对一个账号
-# 一.添加git的ssh
+## 一.添加git的ssh
 ***
-## 1.进入到当前用户的主目录中(指C:user/fengshouli)
+### 1.进入到当前用户的主目录中(指C:user/fengshouli)
 #### 快捷方式,任何地方git bash here 输入cd ~ 就是进到当前用户主目录了
 ```shell
 cd ~
 ```
-## 2.执行一个命令,生成.ssh目录
+### 2.执行一个命令,生成.ssh目录
 ```shell
 ssh-keygen -t rsa -C 435876110@qq.com
 ```
@@ -18,13 +18,13 @@ ssh-keygen -t rsa -C 435876110@qq.com
 (3).后面的邮箱,就是你要关联的git的邮箱.  
 (4).三次回车确认默认值即可.会生成如下图片的两个文件
 ![图片](./picture/git/id_rsa.png)
-## 3.操作SSH的key
+### 3.操作SSH的key
 #### (1).找到github的settings ![图片](./picture/git/settings.png)
 #### (2).找到设置sshkey的地方 ![图片](./picture/git/ssh1.png)
 #### (3).设置key ![图片](./picture/git/ssh2.png)
 #### 生成ssh的key后就可以正常的push操作了
 
-## 4.对ssh远程地址起别名
+### 4.对ssh远程地址起别名
 #### 起别名
 ```shell
 git remote add origin_ssh git@github.com:fengshouli/fengshouli.github.io.git
@@ -36,11 +36,15 @@ git remote -v
 #### 成功后就可以执行那一套操作了
 init,创建文件,添加文件,commit,push
 
-# 二.换台电脑操作同一个git仓库.
+## 二.换台电脑操作同一个git仓库.
 
 ### 1.操作流程,以及遇到的问题.
 
-换了一台新的电脑时候,如果还要对同个git仓库进行操作.首先,添加新电脑的git的 `ssh key` 到git仓库中,如果提交被拒绝,ssh key也没有问题,那么多半是你的新本机的仓库还没有和这个ssh key关联上,用下述方法解决.
+换了一台新的电脑时候,如果还要对同个git仓库进行操作.首先,添加新电脑的git的 `ssh key` 到git仓库中,
+
+## 二-1提交被拒绝.
+
+如果提交被拒绝,ssh key也没有问题,那么多半是你的新本机的仓库还没有和这个ssh key关联上,用下述方法解决.
 
 ssh-add "id_rsa的地址,注意是私钥地址".例如这里是:
 
@@ -56,7 +60,7 @@ ssh git@github.com
 
 验证是不是添加成功
 
-# 三.mac添加公钥
+## 三.mac添加公钥
 
 [mac下查看及生成ssh key ](https://www.jianshu.com/p/ab0f23ed239f)
 
@@ -94,37 +98,37 @@ ssh git@github.com
 
 5. 将代码添加到git
 
-# 四.将代码提交到git仓库
+## 四.将代码提交到git仓库
 
 [提交到远程仓库](https://blog.csdn.net/Thinkingcao/article/details/111242764)
 
-#### 1. 先进入项目文件夹，初始化本地仓库
+### 1. 先进入项目文件夹，初始化本地仓库
 
 > ```
 > git init
 > ```
 
-#### 2. 把文件添加到版本库中，使用命令 git add .添加到暂存区里面去，不要忘记后面的小数点“.”，“.”意为添加文件夹下的所有文件
+### 2. 把文件添加到版本库中，使用命令 git add .添加到暂存区里面去，不要忘记后面的小数点“.”，“.”意为添加文件夹下的所有文件
 
 > ```
 > git add .
 > ```
 
-#### 3. 将文件提交到本地Git仓库
+### 3. 将文件提交到本地Git仓库
 
 > ```
 > git commit -m 'first commit'
 > ```
 
-#### 4. 登录远程Git新建一个仓库(如果已有可跳过这步)
+### 4. 登录远程Git新建一个仓库(如果已有可跳过这步)
 
-#### 5. 将本地代码库关联到远程Git库
+### 5. 将本地代码库关联到远程Git库
 
 > ```
 > git remote add origin 你的远程库地址
 > ```
 
-#### 6. 获取远程库文件与本地同步合并
+### 6. 获取远程库文件与本地同步合并
 
 **tips：** 远程仓库在新建的时候如果初始化生成了README.md文件等，那么需要执行这一步；也就是当远程库不为空时必须做这一步，否则后面的提交会失败。
 
@@ -132,7 +136,7 @@ ssh git@github.com
 > git pull --rebase origin master
 > ```
 
-#### 7. 查询需要推送到远程的文件情况
+### 7. 查询需要推送到远程的文件情况
 
 使用状态查询命令`git status`可以查询到本地需要推送到远程仓库的文件情况。
 
@@ -140,7 +144,7 @@ ssh git@github.com
 > git status
 > ```
 
-#### 8. 把本地库的内容推送到远程仓库
+### 8. 把本地库的内容推送到远程仓库
 
 使用`git push`命令，实际上是把当前分支`master`推送到远程。执行此命令后有可能会要求输入用户名、密码，验证通过后即开始上传。
 
@@ -148,7 +152,7 @@ ssh git@github.com
 > git push -u origin master
 > ```
 
-# 五.git命令总结
+## 五.git命令总结
 
 ### 1.常见命令
 
@@ -219,5 +223,26 @@ ssh git@github.com
 
 ------
 
-#### 3.![git常见命令](./picture/git/git_command_tree.png)
+### 3.图示![git常见命令](./picture/git/git_command_tree.png)
 
+## 六.vuepress发布在github上如何绑定域名
+
+### 1.申请域名.
+
+在阿里云,腾讯云上,申请个域名,在这里,我是用的腾讯云,  
+
+需要注意的是,申请的域名是需要实名认证和审核的,一般在1个工作日内就可以完成,
+
+### 2.项目中增加域名配置文件
+
+增加CNAME文件,里面只有域名.
+
+![添加cname](./picture/git/add_CNAME1.jpg)
+
+![2](./picture/git/add_CNAME1-1.jpg)
+
+### 3.将域名添加解析.
+
+将域名添加解析,解析规则也是CNAME,然后配置那个git发布地址.例如"fengshouli.github.io",等待审核完了就可以使用了.
+
+![2](./picture/git/add_CNAME2.jpg)

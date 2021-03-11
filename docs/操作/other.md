@@ -61,3 +61,6 @@ sudo virtualenv -p /Library/Frameworks/Python.framework/Versions/3.9/bin/python3
 source py3env/bin/activate
 pip -V
 sudo pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple/
+
+# 3.绑定github.id到域名
+[实用文章](https://www.cnblogs.com/liangmingshen/p/9561994.html)
