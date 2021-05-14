@@ -1444,7 +1444,7 @@ static class ThreadLocalMap {
 那么当我们重写init或者调用set/get的时候，内部的逻辑是怎样的呢，按照上面的说法，应该是将value存储到了ThreadLocalMap中，或者从已有的ThreadLocalMap中获取value，我们来通过代码分析一下。
 
 **2.ThreadLocal.set(T value)**
-set的逻辑比较简单,就是获取当前线程的ThreadLocalMap,然后往map中添加k,v,key是this,也是就当前ThreadLocal的实例,value是我们传入的value
+`set的逻辑比较简单,就是获取当前线程的ThreadLocalMap,然后往map中添加k,v,key是this,也是就当前ThreadLocal的实例,value是我们传入的value`
 
 ```java
 public void set(T value) {
@@ -2009,15 +2009,230 @@ Java阻塞队列SynchronousQueue详解：https://www.jianshu.com/p/376d368cb44f
 
 ### 5.Object.wait(),Object.notify()
 
+```java
+public class Demo {
+    private static Object lock = new Object();
+    public static void main(String[] args) {
+        new Thread(() -> {
+            for (int index = 1; index < 27; index++) {
+                synchronized (lock) {
+                    try {
+                        lock.wait();
+                        System.out.println(index);
+                        lock.notify();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
+        new Thread(() -> {
+            String str1 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            for (int index = 0; index < str1.length(); index++) {
+                synchronized (lock) {
+                    try {
+                        System.out.println(str1.substring(index, index + 1));
+                        lock.notify();
+                        lock.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
+    }
+}
+
+```
+
+
+
 ### 6.LockSupport
+
+```java
+public class Demo44 {
+    private static Thread thread1 = null;
+    private static Thread thread2 = null;
+    public static void main(String[] args) {
+        thread1 = new Thread(() -> {
+            for (int index = 1; index < 27; index++) {
+                LockSupport.park();
+                System.out.println(index);
+                LockSupport.unpark(thread2);
+            }
+        });
+        thread2 = new Thread(() -> {
+            String str1 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            for (int index = 0; index < str1.length(); index++) {
+                System.out.println(str1.substring(index, index + 1));
+                LockSupport.unpark(thread1);
+                LockSupport.park();
+            }
+        });
+        thread1.start();
+        thread2.start();
+    }
+}
+
+```
+
+
 
 ### 7.ReentrantLock单锁
 
+```java
+public class Demo45 {
+    public static void main(String[] args) {
+        ReentrantLock lock = new ReentrantLock();
+        Condition condition = lock.newCondition();
+        new Thread(() -> {
+            try {
+                lock.lock();
+                for (int index = 1; index < 27; index++) {
+                    try {
+                        condition.await();
+                        System.out.println(index);
+                        condition.signal();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }finally {
+                lock.unlock();
+            }
+        }).start();
+        new Thread(() -> {
+            try {
+                lock.lock();
+                String str1 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                for (int index = 0; index < str1.length(); index++) {
+                    try {
+                        System.out.println(str1.substring(index, index + 1));
+                        condition.signal();
+                        condition.await();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }finally {
+                lock.unlock();
+            }
+        }).start();
+    }
+}
+
+```
+
+
+
 ### 8.ReentrantLock双锁
+
+```java
+public class Demo46 {
+    public static void main(String[] args) {
+        ReentrantLock lock = new ReentrantLock();
+        Condition condition1 = lock.newCondition();
+        Condition condition2 = lock.newCondition();
+        new Thread(() -> {
+            try {
+                lock.lock();
+                for (int index = 1; index < 27; index++) {
+                    try {
+                        condition1.await();
+                        System.out.println(index);
+                        condition2.signalAll();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }finally {
+                lock.unlock();
+            }
+        }).start();
+        new Thread(() -> {
+            try {
+                lock.lock();
+                String str1 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                for (int index = 0; index < str1.length(); index++) {
+                    try {
+                        System.out.println(str1.substring(index, index + 1));
+                        condition1.signalAll();
+                        condition2.await();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }finally {
+                lock.unlock();
+            }
+        }).start();
+    }
+}
+
+```
+
+
 
 ### 9.CAS锁
 
+```java
+public class Demo47 {
+    enum T { T1, T2 }
+    private static volatile T t = T.T2;
+    public static void main(String[] args) {
+        new Thread(() -> {
+            for (int index = 1; index < 27; index++) {
+                while(t != T.T1){
+                }
+                System.out.println(index);
+                t = T.T2;
+            }
+        }).start();
+        new Thread(() -> {
+            String str1 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            for (int index = 0; index < str1.length(); index++) {
+                while(t != T.T2){
+                }
+                System.out.println(str1.substring(index, index + 1));
+                t = T.T1;
+            }
+        }).start();
+    }
+}
+
+```
+
+
+
 ### 10.AtomicInteger-CAS
+
+```java
+public class Demo48 {
+    private static AtomicInteger atomicInteger = new AtomicInteger(2);
+    public static void main(String[] args) {
+        new Thread(() -> {
+            for (int index = 1; index < 27; index++) {
+                while(atomicInteger.get() != 1){
+                }
+                System.out.println(index);
+                atomicInteger.set(2);
+            }
+        }).start();
+        new Thread(() -> {
+            String str1 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            for (int index = 0; index < str1.length(); index++) {
+                while(atomicInteger.get() != 2){
+                }
+                System.out.println(str1.substring(index, index + 1));
+                atomicInteger.set(1);
+            }
+        }).start();
+    }
+}
+
+```
+
+
 
 ## 十六.线程池
 

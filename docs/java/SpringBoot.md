@@ -16,7 +16,7 @@
 
 
 
-## 四.配置文件位置优先级及细节
+## 四.配置文件位置优先级及细节&常见问题
 
 ### 递减优先级
 
@@ -38,9 +38,23 @@
 
  在之前的项目开发中，我们可以使用xml,properties进行相关的配置，这种配置方式比较简单，但是在应对复杂的商业需求下，多环境和编程化的配置无法得到满足，因此springboot为我们提供了YAML的配置方式丰富功能和简化开发。
 
-#### 1、Properties配置详解
+#### 1.Properties配置详解
 
- 通常情况下，我们可以使用properties文件进行相关的配置。
+##### 常见配置
+
+1. **修改tomcat端口**
+
+```shell
+server.port=90
+```
+
+2. **修改项目根路径**
+
+```shell
+server.servlet.context-path=/demo 
+```
+
+3. **通常情况下，我们可以使用properties文件进行相关的配置。**
 
  （1）在resources目录下创建application.properties
 
@@ -101,7 +115,7 @@ class ConfigApplicationTests {
 }
 ```
 
- 可以在properties文件中使用随机数
+4. 可以在properties文件中使用随机数
 
  （1）在application.properties文件中添加如下属性
 
@@ -179,7 +193,24 @@ class ConfigApplicationTests {
 spring.profiles.active=dev/test/prod
 ```
 
-#### 2、YAML
+5. 配置Mybatis
+
+```properties
+spring.datasource.url=jdbc:mysql://localhost:3306/ssm?characterEncoding=utf8&useSSL=false&serverTimezone=UTC
+##数据库用户名
+spring.datasource.username=root
+##数据库密码
+spring.datasource.password=840416
+
+# 用来实例化mapper接口
+mybatis.type-aliases-package=com.mashibing.springboot.mapper
+# 对应的sql映射
+mybatis.mapper-locations=classpath:mybatis/mapper/*.xml
+```
+
+
+
+#### 2.YAML
 
  YAML是“YAML Ain't Markup Language YAML不是一种标记语言”的外语缩写，但为了强调这种语言以数据做为中心，而不是以置标语言为重点，而用返璞词重新命名。它是一种直观的能够被电脑识别的数据序列化格式，是一个可读性高并且容易被人类阅读，容易和脚本语言交互，用来表达资料序列的编程语言。它是类似于标准通用标记语言的子集XML的数据描述语言，语法比XML简单很多。
 
@@ -256,13 +287,130 @@ public class Person {
 }
 ```
 
-#### 3、@ConfigurationProperties 与 @Value 对比
+#### 3.pom.xml
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+<!--    父工程,没有就是springboot的-->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.4.3</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+<!--    包的一些信息-->
+    <groupId>com.fengshouli</groupId>
+    <artifactId>study</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>study</name>
+    <description>Demo project for Spring Boot</description>
+<!--   jdk版本控制 -->
+    <properties>
+        <java.version>1.8</java.version>
+    </properties>
+<!--    依赖-->
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+<!--        验证 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+        <!--thymeleaf模板-->
+        <dependency>
+            <groupId>org.thymeleaf</groupId>
+            <artifactId>thymeleaf-spring5</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-starter</artifactId>
+            <version>2.1.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+<!--                    多个main方法找不到主类的时候,配置一个-->
+                    <mainClass>com.fengshouli.StudyApplication</mainClass>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
+
+```
+
+
+
+#### 4.@ConfigurationProperties 与 @Value 对比
 
 | 功能       | @ConfigurationProperties | @Value |
 | ---------- | ------------------------ | ------ |
 | 松散绑定   | 是                       | 否     |
 | 元数据支持 | 是                       | 否     |
 | spEL表达式 | 否                       | 是     |
+
+### 常见问题
+
+1. Pom.xml文件中,Springboot项目必须要继承的parent
+
+1. ```xml
+   <!--    父工程,没有就是springboot的-->
+   <!--    注意,如果这个报错,会导致依赖中的jar也不会下载,必须先解决这个报错的问题-->
+       <parent>
+           <groupId>org.springframework.boot</groupId>
+           <artifactId>spring-boot-starter-parent</artifactId>
+           <version>2.4.3</version>
+           <relativePath/> <!-- lookup parent from repository -->
+       </parent>
+   ```
+
+2. 缺包或者jar下不下来,
+
+   1. 可能是由于下载失败导致的,删除掉jar,重新下载
+
+3. 找不到主类
+
+   ![1](./picture/springBoot/1571507024547.png)
+
+   所有错误都解决后
+
+   Jar方式运行 首先得有这个jar包
+
+   先clean package 生成jar文件，然后再run main方法
+
+4. 找不到jdk
+
+   ![2](./picture/springBoot/1571507027980.png)
+
+   把jre的路径换成jdk的
+
+   ![3](./picture/springBoot/1571507031151.png)
 
 ## 五.SpringBoot开发
 
@@ -521,11 +669,13 @@ html页面中写入如下代码：
 
 ### 3、标准表达式语法
 
+#### 1.语法
+
 学习Thymeleaf标准方言的最重要的部分之一：Thymeleaf标准表达式语法(Thymeleaf Standard Expression syntax)。
 
 我们已经见过了两种用这种语法表达的合理的属性值：消息和变量表达式：
 
-```
+```xml
 <p th:utext="#{home.welcome}">Welcome to our grocery store!</p>
 
 <p>Today is: <span th:text="${today}">13 february 2011</span></p>
@@ -547,28 +697,324 @@ html页面中写入如下代码：
   - 常符号 Literal tokens: `one`, `sometext`, `main`,…
 - 文本操作 Text operations:
   - 字符串连接 String concatenation: `+`
+  
   - 常量替换 Literal substitutions: `|The name is ${name}|`
+  
+  - ```xml
+    <!--空格属于特殊字符，必须使用单引号包含整个字符串-->
+    <p class="css1 css2" th:class="'css1 css2'">样式</p>
+     
+    <!--下面如果没用单引号 th:text="Big China"，则页面直接报错-->
+    <p th:text="'Big China'">中国</p>
+     
+    <!--后台使用：model.addAttribute("info", "Love you 中国"); 传值有空格也是没有问题的-->
+    <p th:text="${userName}">userName</p>
+     
+    <!--后台传值字符串有空格是可以的，可以使用 + 进行字符串连接-->
+    <p th:text="'small smile'+',very good.' + ${userName}">浅浅的微笑</p>
+    ```
+  
+    
 - 算数操作 Arithmetic operations:
   - Binary operators: `+`, `-`, `*`, `/`, `%`
+  
   - Minus sign (unary operator): `-`
+  
+  - ```xml
+    <p th:text="80">8</p>
+    <!--计算结果为 16 在进行替换-->
+    <p th:text="8+8">8 + 8</p>
+    <!--前面 8+8 计算结果为 16，然后字符串拼接上 Love，后面的 9+9也会被当做字符串拼接-->
+    <p th:text="8+8+' Love '+9+9">8 + 8+' Love '+9+9</p>
+    <!--前面 8+8 计算结果为 16，后面的 9+9因为有括号,所以也会计算结果，最后拼接 Love 字符串-->
+    <p th:text="8+8+' Love '+(9+9)">8 + 8+' Love '+(9+9)</p>
+    <!--后台传了一个：model.addAttribute("age", 35);取得结果后在进行计算-->
+    <p th:text="100-${age}"></p>
+    ```
+  
+    
 - 布尔操作 Boolean operations:
   - 布尔操作符 Binary operators: `and`, `or`
+  
   - 布尔否定 一元操作符Boolean negation (unary operator): `!`, `not`
+  
+  - ```xml
+    <p th:text="true">布尔</p>
+    <!--true、false 是布尔值，and 是布尔运行符，and(与)，or(或)，not(非)、!(非)-->
+    <p th:text="true and false">true and true</p>
+     
+    <!--后台使用 model.addAttribute("isMarry", true); 传了值-->
+    <!--th:if 表达式为 true，则显示标签内容，否则不显示-->
+    <p th:if="${isMarry}">已结婚</p>
+     
+    <!--后台传值：model.addAttribute("age", 35);-->
+    <!--比较运算符：&gt;，&lt;，&gt; =，&lt;=（gt，lt，ge，le）-->
+    <p th:if="${age}&gt;18">已成年</p>
+    <p th:if="${age}&lt;18">未成年</p>
+    ```
+  
+    
 - 比较和相等 Comparisons and equality:
   - 比较符 Comparators: `>`, `<`, `>=`, `<=` (`gt`, `lt`, `ge`, `le`)
+  
   - 相等符 Equality operators: `==`, `!=` (`eq`, `ne`)
+  
+  - ```xml
+    <p th:if="5>3">5 大于 3</p>
+    <p th:if="5 &gt;4">5 大于 4</p>
+    <p th:if="10>=8 and 7 !=8">10大于等于8，且 7 不等于 8 </p>
+    <p th:if="!${isMarry}">!false</p>
+    <p th:if="not(${isMarry})">not(false)</p>
+    ```
+  
+    
 - 条件操作符 Conditional operators:
   - If-then: `(if) ? (then)`
+  
   - If-then-else: `(if) ? (then) : (else)`
+  
   - 默认值 Default: `(value) ?: (defaultvalue)`
+  
+  - ```xml
+    <!--三目运算符-->
+    <p th:text="7&gt;5?'7大':'5大'">三元运算符</p>
+    <!--后台控制器输出了：model.addAttribute("age", 35);-->
+    <!--因为 ${xx}取值时，如果值为null，则默认整个标签不再显示-->
+    <p th:text="${age}!=null?${age}:'age等于 null'"></p>
+    <!--这里使用嵌套判断，嵌套的部分要使用括号-->
+    <p th:text="${age}!=null?(${age}>=18?'成年':'未成年'):'age等于 null'"></p>
+    <!--变量 age2 后台并没有输出，所以 age2 不存在，此时 age2 ==null-->
+    <p th:text="${age2}!=null?${age2}:'age2等于 null'"></p>
+     
+    <!--后台输出了：model.addAttribute("isMarry", true);-->
+    <!--A>B?X:Y，这里的 Y 部分是省略的，此时如果 A>B 返回 false，则整个三元运算结果为 null-->
+    <p th:class="${isMarry}?'css2':'css3'">已婚</p>
+    ```
+  
+    
 - 特殊符号 Special tokens:
+  
   - 无操作符 No-Operation: `_`
 
 这些功能可以自由的组合和嵌套:
 
-```
+```xml
 'User is of type ' + (${user.isAdmin()} ? 'Administrator' : (${user.type} ?: 'Unknown'))
 ```
+
+#### 2.th标签
+
+* th:utext转义
+
+  ```xml
+  map .addAttribute("china", "<b>Chian</b>,USA,UK");
+  <p th:text="${china}">默认转义</p>
+  <!--th:utext 不会结果进行转义-->
+  <p th:utext="${china}">不会转义</p>
+  ```
+
+  
+
+* th:attr 设置属性
+
+  <font color="red">HTML5 所有的属性，都可以使用 th:* 的形式进行设置值</font>
+
+  ```xml
+  <a href="http://baidu.com" th:attr="title='百度'">百度</a>
+  <!--设置 title、href 多个属性-->
+  <a href="" th:attr="title='前往百度',href='http://baidu.com'">前往百度</a>
+  <!--设置 href 属性-->
+  <a href="userList.html" th:attr="href=@{/user/userHome}">用户首页</a>
+  <!--设置 id 属性，data-schoolName 属性 Html 本身是没有的，但允许用户自定义 -->
+  <a href="#" th:attr="id='9527',data-target='user'">归海一刀</a>
+  
+  <p th:abc="9527">th:abc="9527"</p>
+  
+  <!--输出：<p abc123="华安">th:abc123="华安"</p>-->
+  <p th:abc123="华安">th:abc123="华安"</p>
+  ```
+
+  
+
+* checked selected
+
+  ```xml
+  <input type="checkbox" name="option1" checked/><span>是否已婚1？</span>
+  <input type="checkbox" name="option2" checked="checked"/><span>是否已婚2？</span>
+  ---<br>
+  <!--后台控制器传递了一个：model.addAttribute("isMarry", true);-->
+  <!--option3、option4 会选中；option5 不会选中-->
+  <input type="checkbox" name="option3" th:checked="${isMarry}"/><span>是否已婚3？</span>
+  <input type="radio" name="option4" th:checked="${isMarry}"/><span>是否本科？</span>
+  <input type="radio" name="option5" th:checked="!${isMarry}"/><span>是否应届生？</span>
+  --------------------- 
+  <select>
+  	<option>a</option>
+  	<option th:selected="${isMarry}">已婚</option>
+  	<option  th:selected="${!isMarry}">未婚</option>
+  
+  </select>
+  <input type="text" th:autofocus="false">
+  <input type="text" th:autofocus="true">
+  <input type="text" th:autofocus="false">
+  ```
+
+  
+
+#### 3.日期格式化
+
+```xml
+<span th:text="${#dates.format(date, 'yyyy-MM-dd HH:mm')}"></span>
+```
+
+
+
+#### 4.循环
+
+JSTL 有一个 <c:foreach>，同理 Thymeleaf 也有一个 th:each。作用都是一样的，都是用于遍历数组、List、Set、Map 等数据。
+
+* 在select 上循环
+
+  ```xml
+      <option th:each="city : ${list}" th:text="${city.name}" th:selected="${cityName} eq ${city.name}">横岗</option>
+  ```
+
+  
+
+* 状态变量loopStatus
+
+  ```xml
+  如果不指定 为变量+Stat
+  index: 当前迭代对象的index（从0开始计算）   
+  count:  当前迭代对象的index(从1开始计算)   
+  size: 被迭代对象的大小     current:当前迭代变量   
+  even/odd: 布尔值，当前循环是否是偶数/奇数（从0开始计算）   
+  first: 布尔值，当前循环是否是第一个   
+  last: 布尔值，当前循环是否是最后一个
+  <tr th:each="city,status : ${list}" th:style="${status.odd}?'background-color:#c2c2c2'">
+  		<!-- EL JSTL-->
+  		<td th:text = "${status.count}"></td>
+  		<td th:text = "${city.id}"></td>
+  		<td th:text = "${city.name}"></td>
+  </tr>
+  ```
+
+  
+
+#### 5.if/else
+
+```xml
+<p th:if="${isMarry}">已婚1</p>
+<p th:unless="${isMarry}">未婚</p>
+```
+
+
+
+#### 6. switch/case 多条件判断
+
+```xml
+<div th:switch="1">
+    <p th:case="0">管理员</p>
+    <p th:case="1">操作员</p>
+    <p th:case="*">未知用户</p>
+</div>
+ 
+<!--数字类型：当没有 case 匹配时，取默认值，当有多个匹配，只取第一个-->
+<div th:switch="-1">
+    <p th:case="0">管理员</p>
+    <p th:case="*">操作员</p>
+    <p th:case="*">未知用户</p>
+</div>
+ 
+<!--布尔类型，多个case满足时，只取第一个-->
+<div th:switch="${isMarry}">
+    <p th:case="true">已婚</p>
+    <p th:case="true">已成年</p>
+    <p th:case="false">未婚</p>
+</div>
+ 
+<!--字符串类型-->
+<div th:switch="'For China'">
+    <p th:case="'For USA'">美国</p>
+    <p th:case="'For UK'">英国</p>
+    <p th:case="'For China'">中国</p>
+    <p th:case="*">未知国籍</p>
+</div>
+```
+
+
+
+#### 7.内联表达式
+
+[[...]] 等价于 th:text（结果将被 HTML 转义），[(...)] 等价于 th:utext（结果不会执⾏HTML转义）
+
+```xml
+<p>[[${china}]]</p>
+<p>[(${china})]</p>
+<p>[[Lo1ve]]</p>
+<p>[['I Love You Baby']]</p>
+<p>[(9527)]</p>
+```
+
+th:inline =“none” 来禁⽤内联。
+
+* 内联JavaScript
+
+  ```xml
+  <script type="text/javascript" th:inline="javascript">
+       var info = [[${info}]];
+          var age = [[${age}]];
+          var id = [[${id}]];
+          var name = [[${name}]];
+          console.log(id, name, age, info);
+  </script>
+  ```
+
+  
+
+* 前后端分离
+
+  ```xml
+  <script type="text/javascript" th:inline="javascript">
+          /**
+           * Thymeleaf 将自动忽略掉注释之后 和 分号之前的所有内容,如下为 "前端测试"
+           */
+          var info = /*[[${info}]]*/ "前端测试";
+          console.log(info);
+  </script>
+  ```
+
+  
+
+#### 8.对象属性
+
+* URL
+
+  ```xml
+  <p>${param.size()}=[[${param.size()}]]</p>
+  <!--/*判断请求参数是否为空*/-->
+  <p>${param.isEmpty()}=[[${param.isEmpty()}]]</p>
+  <!--获取某个参数值，不存在时为null-->
+  <p>${param.u_id}=[[${param.u_id}]]</p>
+  ```
+
+  
+
+* Session
+
+  ```xml
+  <p>${session.size()}=[[${session.size()}]]</p>
+  <!--/*判断请求参数是否为空*/-->
+  <p>${session.isEmpty()}=[[${session.isEmpty()}]]</p>
+  <!--获取某个参数值，不存在时为null-->
+  <p>${session.user.id}=[[${session.user.id}]]</p>
+  ```
+
+  
+
+#### 9.完整文档地址
+
+[英文官网文档地址](https://www.thymeleaf.org/doc/tutorials/2.1/usingthymeleaf.html#base-objects)
 
 ### 4、thymeleaf实例演示
 
@@ -1105,6 +1551,8 @@ public class MessageSourceAutoConfiguration {
 	}
 ```
 
+
+
 ## 七.springboot配置数据源
 
 ​		Spring Framework 为 SQL 数据库提供了广泛的支持。从直接使用 JdbcTemplate 进行 JDBC 访问到完全的对象关系映射（object relational mapping）技术，比如 Hibernate。Spring Data 提供了更多级别的功能，直接从接口创建的 Repository 实现，并使用了约定从方法名生成查询。
@@ -1131,8 +1579,8 @@ public class MessageSourceAutoConfiguration {
 spring:
   datasource:
     username: root
-    password: 123456
-    url: jdbc:mysql://192.168.85.111:3306/sakila?serverTimezone=UTC&useUnicode=true@characterEncoding=utf-8
+    password: fxy123456
+    url: jdbc:mysql://localhost:3306/sakila?serverTimezone=UTC&useUnicode=true@characterEncoding=utf-8
     driver-class-name: com.mysql.jdbc.Driver
 ```
 
@@ -1296,8 +1744,8 @@ public class DataSourceAutoConfiguration {
 spring:
   datasource:
     username: root
-    password: 123456
-    url: jdbc:mysql://192.168.85.111:3306/demo?serverTimezone=UTC&useUnicode=true@characterEncoding=utf-8
+    password: fxy123456
+    url: jdbc:mysql://localhost:3306/demo?serverTimezone=UTC&useUnicode=true@characterEncoding=utf-8
     driver-class-name: com.mysql.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
 ```
@@ -1743,7 +2191,7 @@ public class SpringbootDataApplication {
 
 ### 4、springboot整合mybatis
 
-1、导入mybatis的依赖
+#### 1、导入mybatis的依赖,或者创建项目的时候选中mybatis插件,
 
 ```xml
 <!-- https://mvnrepository.com/artifact/org.mybatis.spring.boot/mybatis-spring-boot-starter -->
@@ -1755,18 +2203,22 @@ public class SpringbootDataApplication {
 
 ```
 
-2、配置数据源
+#### 2、配置数据源及mybatis配置
 
 ```yaml
 spring:
   datasource:
     username: root
-    password: 123456
-    url: jdbc:mysql://192.168.85.111:3306/demo?serverTimezone=UTC&useUnicode=true@characterEncoding=utf-8
+    password: fxy123456
+    url: jdbc:mysql://localhost:3306/sakila?serverTimezone=UTC&useUnicode=true@characterEncoding=utf-8
     driver-class-name: com.mysql.jdbc.Driver
+mybatis:
+#xml文件在哪路径就配在哪里,这个classpath相当于resource根目录
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.mashibing.entity
 ```
 
-3、测试类
+#### 3、test 测试类
 
 ```java
 package com.mashibing;
@@ -1798,14 +2250,23 @@ class DataApplicationTests {
 }
 ```
 
-4、创建实体类
+#### 4、创建实体类
 
 ```java
 package com.mashibing.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
 import java.sql.Date;
 import java.util.Objects;
 
+@Data
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class Emp {
     private Integer empno;
     private String ename;
@@ -1816,87 +2277,9 @@ public class Emp {
     private Double comm;
     private Integer deptno;
 
-    public Emp() {
-    }
-
     public Emp(Integer empno, String ename) {
         this.empno = empno;
         this.ename = ename;
-    }
-
-    public Emp(Integer empno, String ename, String job, Integer mgr, Date hiredate, Double sal, Double comm, Integer deptno) {
-        this.empno = empno;
-        this.ename = ename;
-        this.job = job;
-        this.mgr = mgr;
-        this.hiredate = hiredate;
-        this.sal = sal;
-        this.comm = comm;
-        this.deptno = deptno;
-    }
-
-    public Integer getEmpno() {
-        return empno;
-    }
-
-    public void setEmpno(Integer empno) {
-        this.empno = empno;
-    }
-
-    public String getEname() {
-        return ename;
-    }
-
-    public void setEname(String ename) {
-        this.ename = ename;
-    }
-
-    public String getJob() {
-        return job;
-    }
-
-    public void setJob(String job) {
-        this.job = job;
-    }
-
-    public Integer getMgr() {
-        return mgr;
-    }
-
-    public void setMgr(Integer mgr) {
-        this.mgr = mgr;
-    }
-
-    public Date getHiredate() {
-        return hiredate;
-    }
-
-    public void setHiredate(Date hiredate) {
-        this.hiredate = hiredate;
-    }
-
-    public Double getSal() {
-        return sal;
-    }
-
-    public void setSal(Double sal) {
-        this.sal = sal;
-    }
-
-    public Double getComm() {
-        return comm;
-    }
-
-    public void setComm(Double comm) {
-        this.comm = comm;
-    }
-
-    public Integer getDeptno() {
-        return deptno;
-    }
-
-    public void setDeptno(Integer deptno) {
-        this.deptno = deptno;
     }
 
     @Override
@@ -1919,24 +2302,11 @@ public class Emp {
 
         return Objects.hash(empno, ename, job, mgr, hiredate, sal, comm, deptno);
     }
-
-    @Override
-    public String toString() {
-        return "Emp{" +
-                "empno=" + empno +
-                ", ename='" + ename + '\'' +
-                ", job='" + job + '\'' +
-                ", mgr=" + mgr +
-                ", hiredate=" + hiredate +
-                ", sal=" + sal +
-                ", comm=" + comm +
-                ", deptno=" + deptno +
-                '}';
-    }
+    
 }
 ```
 
-5、配置Mapper接口类
+#### 5、配置Mapper接口类
 
 ```java
 package com.mashibing.mapper;
@@ -1961,10 +2331,16 @@ public interface EmpMapper {
 
     Integer deleteEmp(Integer empno);
 }
+/**
+### 加@Mapper或者在入口加入 MapperScan
+
+@MapperScan("com.mashibing.springboot.mapper")
+public class Springboot03MybatisApplication {
+*/
 
 ```
 
-6、在resources下创建Emp.xml文件
+#### 6、在resources下创建Emp.xml文件
 
 ```xml
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -1995,21 +2371,7 @@ public interface EmpMapper {
 </mapper>
 ```
 
-7、添加配置文件
-
-```yaml
-spring:
-  datasource:
-    username: root
-    password: 123456
-    url: jdbc:mysql://192.168.85.111:3306/demo?serverTimezone=UTC&useUnicode=true@characterEncoding=utf-8
-    driver-class-name: com.mysql.jdbc.Driver
-mybatis:
-  mapper-locations: classpath:mybatis/mapper/*.xml
-  type-aliases-package: com.mashibing.entity
-```
-
-8、编写controller
+#### 7、编写controller
 
 ```java
 package com.mashibing.contoller;
@@ -2065,4 +2427,153 @@ public class EmpController {
 
 ```
 
-9、测试即可
+#### 8、测试即可
+
+### 5.Mybatis自动生成插件
+
+eclipse插件 市场搜素
+
+MyBatis Generator
+
+```xml
+<dependency>
+    <groupId>com.baomidou</groupId>
+    <artifactId>mybatis-plus-generator</artifactId>
+    <version>3.1.2</version>
+</dependency>
+
+<dependency>
+    <groupId>org.freemarker</groupId>
+    <artifactId>freemarker</artifactId>
+    <version>2.3.28</version>
+</dependency>
+```
+
+### 官方示例
+
+[苞米豆生成器文档](https://mp.baomidou.com/guide/generator.html)
+
+### 6.图形化
+
+https://github.com/zouzg/mybatis-generator-gui
+
+### 7.分页查询-PageHelper
+
+依赖
+
+```xml
+<!-- https://mvnrepository.com/artifact/com.github.pagehelper/pagehelper-spring-boot-starter -->
+<dependency>
+    <groupId>com.github.pagehelper</groupId>
+    <artifactId>pagehelper-spring-boot-starter</artifactId>
+    <version>1.2.12</version>
+</dependency>
+
+```
+
+Service
+
+```java
+	public Object findPage(int pageNum, int pageSize) {
+		PageHelper.startPage(pageNum, pageSize);
+		AccountExample example = new AccountExample();
+		return mapper.selectByExample(example);
+	}
+```
+
+
+
+## 八.SpringData Jpa进阶使用
+
+### 1.使用场景
+
+​	适用于单表,快速CURD,极速完成一块功能开发.
+
+### 2.控制台显示sql语句
+
+在properties中加入如下配置.
+
+```properties
+spring.jpa.show-sql=true
+```
+
+### 3.自定义接口
+
+* And --- 等价于 SQL 中的 and 关键字，比如 findByUsernameAndPassword(String user, String pwd)；
+
+* Or --- 等价于 SQL 中的 or 关键字，比如 findByUsernameOrAddress(String user, String addr)；
+
+* Between --- 等价于 SQL 中的 between 关键字，比如 findBySalaryBetween(int max, int min)；
+
+* LessThan --- 等价于 SQL 中的 "<"，比如 findBySalaryLessThan(int max)；
+
+* GreaterThan --- 等价于 SQL 中的">"，比如 findBySalaryGreaterThan(int min)；
+
+* IsNull --- 等价于 SQL 中的 "is null"，比如 findByUsernameIsNull()；
+
+* IsNotNull --- 等价于 SQL 中的 "is not null"，比如 findByUsernameIsNotNull()；
+
+* NotNull --- 与 IsNotNull 等价；
+
+* Like --- 等价于 SQL 中的 "like"，比如 findByUsernameLike(String user)；
+
+* NotLike --- 等价于 SQL 中的 "not like"，比如 findByUsernameNotLike(String user)；
+
+* OrderBy --- 等价于 SQL 中的 "order by"，比如 findByUsernameOrderBySalaryAsc(String user)；
+
+* Not --- 等价于 SQL 中的 "！ ="，比如 findByUsernameNot(String user)；
+
+* In --- 等价于 SQL 中的 "in"，比如 findByUsernameIn(Collection< String > userList) ，方法的参数可以是 Collection 类型，也可以是数组或者不定长参数；
+
+* NotIn --- 等价于 SQL 中的 "not in"，比如 findByUsernameNotIn(Collection< String > userList) ，方法的参数可以是 Collection 类型，也可以是数组或者不定长参数；
+
+### 4.自定义SQL - @Query
+
+1. 占位符
+
+```java
+public interface UserDao extends Repository<AccountInfo, Long> { 
+//?1代表第一个参数
+@Query("select a from AccountInfo a where a.accountId = ?1") 
+public AccountInfo findByAccountId(Long accountId); 
+
+@Query("select a from AccountInfo a where a.balance > ?1") 
+public Page<AccountInfo> findByBalanceGreaterThan( Integer balance,Pageable pageable); 
+
+}
+```
+
+
+
+2. 参数名
+
+```java
+public interface UserDao extends Repository<AccountInfo, Long> { 
+
+public AccountInfo save(AccountInfo accountInfo); 
+  
+@Query("from AccountInfo a where a.accountId = :id") 
+public AccountInfo findByAccountId(@Param("id")Long accountId); 
+@Query("from AccountInfo a where a.balance > :balance") 
+public Page<AccountInfo> findByBalanceGreaterThan( 
+@Param("balance")Integer balance,Pageable pageable); 
+}
+```
+
+3. 更新
+
+```java
+//?1,?2代表了第一个,第二个参数
+@Modifying 
+@Query("update AccountInfo a set a.salary = ?1 where a.salary < ?2") 
+public int increaseSalary(int after, int before);
+```
+
+4. 直接使用Native Sql
+
+```java
+public interface UserRepository extends JpaRepository<User, Long> {
+@Query(value = "SELECT * FROM USERS WHERE EMAIL_ADDRESS = ?1", nativeQuery = true)
+User findByEmailAddress(String emailAddress);
+```
+

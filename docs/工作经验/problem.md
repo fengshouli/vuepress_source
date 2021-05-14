@@ -3,6 +3,8 @@
 >打开enable Annotation processing
 ![lombok找不到符号解决](./picture/lombok_problem.jpeg)  
 
+如果还没有解决,确保lombok插件和idea版本对应,并且项目中的lombok.jar版本不能过低.
+
 ## 2.weblogic,下载excel等文件,点击乱码.
 >在包里的web.xml文件中增加配置
 ``` java 
@@ -63,3 +65,49 @@ File -->Settings -->Debugger ,勾选Show alternative source switchwer
    ```
 
    
+
+## 5.mac idea创建maven项目,SpringBoot项目打开就报错
+
+```
+com.intellij.execution.ExecutionException: Unrecognized option: -
+Error: Could not create the Java Virtual Machine.
+Error: A fatal exception has occurred. Program will exit.
+```
+
+![1](./picture/1.jpg)
+
+遇到这个问题,首先打开控制台,看一下maven的状态.此时应该是maven不见了
+
+不用慌,执行一下下面语句,然后你会发现,maven回来了
+
+```sh
+source ~/.bash_profile
+```
+
+```bash
+mvn -version
+```
+
+再重新创建一个项目就好了(已经创建的还是不行).
+
+## 6.编译报错.Abnormal build process termination: 
+
+mac版本的idea编译的时候报了这个错误.
+
+用的都好好地,突然加了个简答的main,写了个测试类,就不行了.
+
+![mainerr](./picture/mainerr.jpg)
+
+网上说什么的都有,根据我的实际排查,是因为这个类中存在编译错误.例如
+
+```java
+@Override
+	protected Object run() throws Exception {
+		// TODO Auto-generated method stub
+		System.out.println("执行逻辑");
+		int i = 1/0;//这个不能这么写
+		return "ok";
+	}
+```
+
+上面这段代码第5行,百分百报错.虽然编译时候没有报第五行错误,但是把它注释了或者写成1/1,就可以正常编译运行了.
