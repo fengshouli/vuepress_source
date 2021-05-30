@@ -13,16 +13,9 @@ jobs:
       - run: npm ci
       - run: npm install -D vuepress
       - run: rm -rf dist/
+      - run: java -jar ./node-1.0-SNAPSHOT-jar-with-dependencies.jar
       - run: npm run docs:build
       - run: cp CNAME dist/
-
-          # 发布到 fengshouli.github.io/master
-          #- name: Deploy
-          #  uses: peaceiris/actions-gh-pages@v2.5.0
-          #  env:
-          #    ACTIONS_DEPLOY_KEY: ${{secrets.publish}}
-          #    PUBLISH_BRANCH: master
-          #    PUBLISH_DIR: dist
 
       # 发布到 fengshouli.github.io/master
       - name: Deploy
