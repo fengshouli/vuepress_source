@@ -21,7 +21,7 @@ jobs:
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v2.5.0
         env:
-          ACTIONS_DEPLOY_KEY: ${{secrets.publish}}
+          ACTIONS_DEPLOY_KEY: ${{secrets.DEPLOY_TOKEN}}
           EXTERNAL_REPOSITORY: fengshouli/fengshouli.github.io
           PUBLISH_BRANCH: master
           PUBLISH_DIR: dist
