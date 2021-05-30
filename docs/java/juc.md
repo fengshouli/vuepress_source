@@ -1321,7 +1321,7 @@ public class SoftReferenceTest {
 
 ThreadLocal使用了弱引用
 
-![弱引用-ThreadLocal](./picture/JUC/Weak_Reference.png)
+![弱引用-ThreadLocal](./picture/JUC/WEAK_Reference.png)
 
 ```java
 public class WeakReferenceTest {
