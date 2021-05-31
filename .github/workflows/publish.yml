@@ -6,9 +6,9 @@ on:
     branches:
       - master
 #具体的操作.
+#运行虚拟机环境,Ubuntu是用的最多的.有很多插件,所以咱们也用这个.
 jobs:
   build-deploy:
-  	#运行虚拟机环境,Ubuntu是用的最多的.有很多插件,所以咱们也用这个.
     runs-on: ubuntu-latest
     #步骤,uses就是用插件,run就是执行命令.
     steps:
