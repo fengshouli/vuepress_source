@@ -20,7 +20,9 @@
 
 2. 实际上在这里操作模板,最终也是在仓库中生成一个文件.[./github/workflows/xxx.yml],还记得那个CNAME吗,绑定域名后也是在库中生成一个文件,一个原理.这个yml文件里配置着流程.
 
-3. workflow配置详解.
+3. ![add_action](./picture/github-cicd/add_action.png)
+
+4. workflow配置详解.
 
    ```shell
    #给这个workflow起个名字
@@ -84,7 +86,13 @@
 
    ![](./picture/github-cicd/personalkey.png)
 
-   还记得吗,当初弄git时候,在本地生成了个私钥公钥,id_rsa,id_rsa.pub,这两个文件,然后pub这个文件我们配置在git上了,然后电脑就可以通过ssh进行操作了,所以这里的做法是,复制id_rsa里面的内容,打开git-选择源码项目-setting-scrects-在这里创建,起个名字"RSA_KEY",把私钥内容粘贴进去,然后,配置`${{secrets.RSA_KEY}}`,这样就有权限了,根本不是那个personal什么的,太坑了.
+   还记得吗,当初弄git时候,在本地生成了个私钥公钥,id_rsa,id_rsa.pub,这两个文件,然后pub这个文件我们配置在git上了,然后电脑就可以通过ssh进行操作了,所以这里的做法是,复制id_rsa里面的内容,打开git-选择源码项目-setting-scrects-在这里创建,起个名字"RSA_KEY",把私钥内容粘贴进去,然后,配置
+
+   ```
+   ACTIONS_DEPLOY_KEY: ${{secrets.RSA_KEY}}
+   ```
+
+   ,(注意这玩意直接写编译还会报错,所以代码块包起来.).这样就有权限了,根本不是那个personal什么的,太坑了.
 
    ![](./picture/github-cicd/add_secret.png)
 
