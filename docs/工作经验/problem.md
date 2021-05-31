@@ -111,3 +111,14 @@ mac版本的idea编译的时候报了这个错误.
 ```
 
 上面这段代码第5行,百分百报错.虽然编译时候没有报第五行错误,但是把它注释了或者写成1/1,就可以正常编译运行了.
+
+## 7.idea2020 启动报Command line is too long.Shorten command line ..
+
+修改项目下 .idea\workspace.xml，找到标签 `<component name="PropertiesComponent">` ， 
+
+在标签里加一行
+
+```
+<property name="dynamic.classpath" value="true" />
+```
+

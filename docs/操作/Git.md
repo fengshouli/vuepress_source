@@ -160,9 +160,17 @@ ssh git@github.com
 
 ### 2. Git常用命令列表
 
+* **git clone -b develop 地址 [文件名]** :指定从develop分支clone代码,如果没有文件名,那就是全部
+* git add . :添加所有文件到git.注意那里有个点,不要忽略这个点,
+* git add [file name] :添加一个文件到git
+* git pull [origin master]:从当前默认分支拉代码/从master拉取代码
+* git commit  -m  "注释" ：提交
+* git push [origin master]:推代码到默认分支/推到master
+
+=========================================
+
 - git branch ：查看本地所有分支
 - git status ：查看当前状态
-- git commit ：提交
 - git branch -a ：查看所有的分支
 - git branch -r ：查看远程所有分支
 - git commit -am “init” ：提交并且加注释
@@ -177,16 +185,13 @@ ssh git@github.com
 - git merge origin/dev ：将分支dev与当前分支进行合并
 - git checkout dev ：切换到本地dev分支
 - git remote show ：查看远程库
-- git add .
 - git rm 文件名(包括路径) 从git中删除指定文件
 - git clone https://gitee.com/Thinkingcao/blade-parent.git 从服务器上将代码给拉下来
 - git config --list 看所有用户
 - git ls-files 看已经被提交的
 - git rm [file name] 删除一个文件
 - git commit -a 提交当前repos的所有的改变
-- git add [file name] 添加一个文件到git index
 - git commit -v 当你用－v参数的时候可以看commit的差异
-- git commit -m “This is the message describing the commit” 添加commit信息
 - git commit -a -a是代表add，把所有的change加到git index里然后再commit
 - git commit -a -v 一般提交命令
 - git log 看你commit的日志
