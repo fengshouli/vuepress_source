@@ -84,7 +84,7 @@
 
    ![](./picture/github-cicd/personalkey.png)
 
-   还记得吗,当初弄git时候,在本地生成了个私钥公钥,id_rsa,id_rsa.pub,这两个文件,然后pub这个文件我们配置在git上了,然后电脑就可以通过ssh进行操作了,所以这里的做法是,复制id_rsa里面的内容,打开git-选择源码项目-setting-scrects-在这里创建,起个名字RSA_KEY,把私钥内容粘贴进去,然后,配置${{secrets.RSA_KEY}},这样就有权限了,根本不是那个personal什么的,太坑了.
+   还记得吗,当初弄git时候,在本地生成了个私钥公钥,id_rsa,id_rsa.pub,这两个文件,然后pub这个文件我们配置在git上了,然后电脑就可以通过ssh进行操作了,所以这里的做法是,复制id_rsa里面的内容,打开git-选择源码项目-setting-scrects-在这里创建,起个名字"RSA_KEY",把私钥内容粘贴进去,然后,配置`${{secrets.RSA_KEY}}`,这样就有权限了,根本不是那个personal什么的,太坑了.
 
    ![](./picture/github-cicd/add_secret.png)
 
