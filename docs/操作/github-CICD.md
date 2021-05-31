@@ -16,7 +16,7 @@
 
 1. 点击源码库所在的Actions,选择一个workflow模板.
 
-   ![actions](.\picture\github-cicd\Actions.png)
+   ![actions](./picture/github-cicd/Actions.png)
 
 2. 实际上在这里操作模板,最终也是在仓库中生成一个文件.[./github/workflows/xxx.yml],还记得那个CNAME吗,绑定域名后也是在库中生成一个文件,一个原理.这个yml文件里配置着流程.
 
@@ -68,4 +68,10 @@
    
    ```
 
-   
+
+
+### 3.带你爬坑
+
+1. 编译报错:
+
+   在本地,不管是window机器,还是mac机器,编译都能过,但是一旦上git,就是失败,
