@@ -4,7 +4,7 @@ module.exports = {
     dest: './dist',
     // base: '/',   // 设置站点根路径
     // base:'./',//打包用
-    port: 8080,
+    port: 9999,
     head: [],
     plugins: [],
     themeConfig: {
@@ -23,7 +23,7 @@ module.exports = {
         sidebar: {
             "/java/":["","java_base","lambda","juc","Kafka","设计模式","Redis","spring","SpringBoot","SpringCloud","总结的题目"],
             "/数据库/":["","mysql"],
-            "/操作/":["","Git","Maven","sql","other","软件插件安装"],
+            "/操作/":["","Git","github-CICD","npm","Maven","sql","other","软件插件安装"],
             "/工作经验/":["","实用的类","problem","experience","知识积累"],
             "/项目经验/":["","服务拆分-接口设计","微服务项目架构"],
             "/源码解析/":["","springboot源码解析.md"],
