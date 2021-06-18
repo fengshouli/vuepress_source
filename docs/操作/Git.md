@@ -60,6 +60,14 @@ ssh git@github.com
 
 验证是不是添加成功
 
+## 二-2有些新的文件提交不上去
+
+changes not staged for commit.
+
+![](./picture/git/git_push.png)
+
+将提交文件中,git commit -m "xxx" 改为 git commit -am "xxx",这个a是add的意思.会把那些文件加入.
+
 ## 三.mac添加公钥
 
 [mac下查看及生成ssh key ](https://www.jianshu.com/p/ab0f23ed239f)
