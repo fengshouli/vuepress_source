@@ -307,7 +307,7 @@ changes not staged for commit.
  !/fw/sf/
  说明：忽略全部内容，但是不忽略 .gitignore 文件、根目录下的 /fw/bin/ 和 /fw/sf/ 目录；
 
-### 3.".gitignore"文件 新增忽略文件并没有生效[#](https://www.cnblogs.com/ningjiabing/p/13398140.html#3907147548)
+### 3.".gitignore"文件 新增忽略文件并没有生效
 
 新增的忽略文件没有生效，是因为git是有缓存的，而之前的文件在缓存中，并不会清除掉，还会继续提交，所以更新.gitignore文件，要清除缓存文件
 
