@@ -1,9 +1,15 @@
 # 问题记录
 ## 1.idea使用lombok后,编译提示找不到符号.
->打开enable Annotation processing
-![lombok找不到符号解决](./picture/lombok_problem.jpeg)  
+1. 打开enable Annotation processing
+   ![lombok找不到符号解决](./picture/lombok_problem.jpeg)  
 
-如果还没有解决,确保lombok插件和idea版本对应,并且项目中的lombok.jar版本不能过低.
+2. 增加如下配置
+
+   ![problem](./picture/lombok_problem1.png)
+
+3. 如果还没有解决,确保lombok插件和idea版本对应,并且项目中的lombok.jar版本不能过低.或者升级到高版本.
+
+
 
 ## 2.weblogic,下载excel等文件,点击乱码.
 >在包里的web.xml文件中增加配置

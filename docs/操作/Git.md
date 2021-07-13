@@ -319,3 +319,36 @@ git add .
 #提交代码
 git commit -m 'update .gitignore'
 ```
+
+## 八.复制现有代码到新的分支.
+
+1.创建新的分支,或直接创建并切换到新的分支.
+
+```sh
+#新建分支 如果新的分支已经存在会报错
+git branch newBranch
+# 新建并切换到新的分支 如果新的分支已经存在了会报错
+git checkout -b newBranch 
+```
+
+2.推送代码到新分支的仓库中.
+
+```sh
+#将现有的代码(原分支的)推到新的分支的仓库中
+git push origin pre
+```
+
+3.关联.
+
+```sh
+#如果直接进行git pull 操作,是会报错的.需要进行关联
+git branch --set-upstream-to=origin/newBranch
+```
+
+4.拉代码验证
+
+```sh
+git pull
+#此时已经提示up-to-date
+```
+
