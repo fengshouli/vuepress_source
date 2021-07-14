@@ -352,3 +352,37 @@ git pull
 #此时已经提示up-to-date
 ```
 
+## 九.GIT如何删除分支
+
+1. 打开git操作工具.git bash here
+
+2. 先查看下当前库中有那些个分支.
+
+   ```sh
+   #查看全部分支
+   git branch -a
+   ```
+
+3. 删除分支
+
+   1. 删除远程服务器上的分支
+
+      ```sh
+      #删除远程服务器上的分支
+      git push origin --delete branchxxx
+      ```
+
+   2. 删除本地已经合并了的分支
+
+      ```sh
+      git branch –d branchxxx
+      ```
+
+   3. 删除本地未合并的分支
+
+      ```sh
+      git branch –D branchxxx
+      ```
+
+      
+
