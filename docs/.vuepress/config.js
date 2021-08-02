@@ -24,7 +24,7 @@ module.exports = {
         sidebar: {
             "/java/":["","代码规范","java_base","execption","lambda","juc","Kafka","设计模式","Redis","spring","SpringBoot","SpringCloud","总结的题目"],
             "/数据库/":["","数据库操作","mysql"],
-            "/操作/":["","Git","github-CICD","npm","Maven","sql","other","软件插件安装"],
+            "/操作/":["","Git","github-CICD","npm","Maven","sql","other","软件插件安装","idea-for-mac快捷键"],
             "/工作经验/":["","实用的类","problem","experience","知识积累"],
             "/项目经验/":["","服务拆分-接口设计","微服务项目架构"],
             "/源码解析/":["","springboot源码解析"],

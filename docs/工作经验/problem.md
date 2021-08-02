@@ -3,7 +3,8 @@
 1. 打开enable Annotation processing
    ![lombok找不到符号解决](./picture/lombok_problem.jpeg)  
 
-2. 增加如下配置
+2. 增加如下配置  
+    `-Djps.track.ap.dependencies=false`
 
    ![problem](./picture/lombok_problem1.png)
 

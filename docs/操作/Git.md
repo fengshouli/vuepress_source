@@ -1,7 +1,10 @@
 # git相关操作
-> #### 优点:不用每次输入密码
-> #### 缺点:只能针对一个账号
-## 一.添加git的ssh
+## 一.添加git的ssh-key
+
+> 优点:不用每次输入密码
+
+> 缺点:只能针对一个账号
+
 ***
 ### 1.进入到当前用户的主目录中(指C:user/fengshouli)
 #### 快捷方式,任何地方git bash here 输入cd ~ 就是进到当前用户主目录了
@@ -36,31 +39,36 @@ git remote -v
 #### 成功后就可以执行那一套操作了
 init,创建文件,添加文件,commit,push
 
-## 二.换台电脑操作同一个git仓库.
+## 二.其他电脑操作同一个git仓库(或重新生成ssh-key).
 
-### 1.操作流程,以及遇到的问题.
+换了一台新的电脑时候,如果还要对同个git仓库进行操作.
 
-换了一台新的电脑时候,如果还要对同个git仓库进行操作.首先,添加新电脑的git的 `ssh key` 到git仓库中,
+### 常见问题:
 
-## 二-1提交被拒绝.
+### 1.提交被拒绝.或者拉代码被拒绝.
 
-如果提交被拒绝,ssh key也没有问题,那么多半是你的新本机的仓库还没有和这个ssh key关联上,用下述方法解决.
+1. 首先,确保与私钥对应的公钥已经添加到git仓库的ssh key中.
+
+2. 如果提交被拒绝,ssh key也没有问题,那么多半是你的新本机的仓库还没有和这个ssh key关联上,用下述方法解决.
 
 ssh-add "id_rsa的地址,注意是私钥地址".例如这里是:
 
 ```shell
 ssh-add /Users/fengshouli/.ssh/id_rsa
+或者
+ssh-add ~/.ssh/id_rsa
 ```
 
 add之后可以用
 
 ```shell
 ssh git@github.com
+ssh -T git@github.com
 ```
 
 验证是不是添加成功
 
-## 二-2有些新的文件提交不上去
+### 2.有些新的文件提交不上去
 
 changes not staged for commit.
 
@@ -384,5 +392,166 @@ git pull
       git branch –D branchxxx
       ```
 
-      
+
+## 十.配置多个git信息.
+
+本文记录一下如何配置多个Git账户并创建公钥
+
+> 由于我们在使用GitHub时，常用私人的Git账户来提交练习代码，通常不希望带有公司信息.
+> 而在公司工作时候,通常是用的公司的账号.
+
+### 1. 使用ssh-key生成公钥和私钥
+
+```shell
+# 生成ssh-key，~/:指的是根目录用户的地址，一般是C:\Users\Administrator\.ssh或者mac的user/用户下.
+# 作为github使用
+ssh-keygen -t rsa -C "自己的邮箱" -f ~/.ssh/id_rsa
+
+# 生成第二个ssh-key,指的是公司的地址。username可以定义为你在公司提交的名字，生成密钥
+# 作为gitlab使用
+# 改别名的方式
+ssh-keygen -t rsa -C "公司的邮箱" -f ~/.ssh/gs_rsa
+# 新增一层目录的方式 本人采用的这种方式
+ssh-keygen -t rsa -C "公司的邮箱" -f ~/.ssh/company/id_rsa 
+```
+
+### 2. 进入到.ssh目录下.
+
+可以看到刚才生成的id_rsa文件.带pub的是公钥,不带的是私钥.
+
+### 3. 将公钥分别添加到各个远程git仓库的ssh key中.
+
+### 4. 使用ssh-add添加私钥
+
+```shell
+# 右键打开Git Base Here
+ssh-add ~/.ssh/id_rsa
+ssh-add ~/.ssh/company/id_rsa
+
+# 如果提示：Could not open a connection to your authentication agent，则先执行这个命令(我没用到)
+ssh-agent bash
+```
+
+### 4.1 注意！ssh-agent bash
+
+使用ssh-agent bash这个命令，只是定义一个临时回话，将你的私钥添加到Git的ssh-key中，而config配置文件的作用，是告知Git说你要根据域名去找对应的私钥，要先把私钥添加到Git的ssh-key中，要先有因，后有果。
+
+所以这里就存在一个问题，你必须要在当前这个窗口操作，不能重新开窗口，因为临时设置，新开窗口就无效了。而Git会默认取id_rsa，所以哪怕你设置了config也无效。
+
+### 5. 查看是否成功
+
+```shell
+ssh-add -l
+# 如果成功，会打印出SHA256:你的私钥，一串加密字符串 rsa的地址
+```
+
+### 6.创建config文件
+
+**注意这里的config文件没有后缀!!!**
+
+由于电脑上有两份git信息,我们需要配置文件把他们注册并区分开.
+
+```shell
+# 创建命令
+touch ~/.ssh/config
+```
+
+**config文件配置的信息**
+
+```properties
+# 说明:
+# 注释
+# Host 为域名别名
+# Hostname 真实地址
+# User 用户名
+# IdentityFile rsa的地址
+# PreferredAuthentications 认证方式（publickey--公钥的方式）
+
+# 账号1-github
+    HOST github.com
+    hostname github.com
+    User fengshouli
+    IdentityFile C:\Users\Administrator\.ssh\id_rsa
+    PreferredAuthentications publickey
+
+# 账号2-公司的gitlan私服
+    HOST git.yonyou.com
+    hostname gitlab.gs.com # 公司git项目的地址，ip或者是域名
+    User fengxinyang
+    IdentityFile C:\Users\Administrator\.ssh\gs_rsa
+    PreferredAuthentications publickey
+    
+# 上面是网上找的比较全的.我本地配的比较简单.只配了三个属性,也可以使用
+    Host github.com
+    HostName github.com
+    IdentityFile ~/.ssh/id_rsa
+```
+
+### 7. 验证是否生效
+
+```shell
+ssh -T git@github.com
+ssh -T git@git.yonyou.com
+# 如果返回You've successfully authenticated中的，则表示成功连接。
+```
+
+### 8. 设置用户名.
+
+到了这里,应该已经可以用了.需要注意的是,如果设置过全局的用户名,那么提交代码的时候,会显示全局名称.所以应该给每个git项目设置他们私有的名称.
+
+详细看第十一节,如何设置私有的git提交用户的名称.
+
+## 十一. 如何设置私有的git提交用户的名称
+
+当我们的电脑中同时存在两个git的信息时候,我们希望提交代码是不同的用户名称.  
+
+例如,自己用的时候希望以"fengshouli"用户提交,而在公司则需要"fengxinyang"这个真实的名称提交代码.
+
+本文章将解决这个问题.
+
+### 1. 通常我们会这样设置一个
+
+```shell
+# 全局设置（对所有git工程都有效）
+查询全局用户名: git config --global user.name
+设置用户名： git config --global user.name 用户名
+设置邮箱： git config --global user.email 邮箱
+```
+
+这样的话,如果没有特殊设置过,所有的项目提交人都会变成这个全局变量.所以我们需要给每个项目单独设置.
+
+### 2.对特定工程设置.
+
+```shell
+对特定工程设置（要在命令行中切换到特定工程目录下执行）
+查看当前路径下工程的用户名: git config user.name
+设置用户名： git config user.name 用户名
+设置邮箱： git config user.email 邮箱
+```
+
+这样我们提交这个项目工程时候,就会变成私有的这个的.
+
+### 3.大的springboot项目设置.
+
+加入我们有个springboot项目,下面很多歌module.每个module都对应不同的git,这时候,是不能在最外层设置的.会提示`fatal: not in a git directory`,因为设置名称必须在某个工程下.也就是说,需要进入到某个module才可以进行操作.
+
+### 其他相关语句
+
+```shell
+#查看全局配置 主要看user.name user.email user.password
+git config --list
+
+#移除全局配置账户
+git config --global --unset user.name
+#查看全局用户名 已经显示为空了，说明移除成功
+git config --global user.name
+# 移除全局配置邮箱
+git config --global --unset user.email
+# 再查看全局邮箱 已经显示为空了，说明移除成功
+git config --global user.email
+# 移除全局密码
+git config --global --unset user.password
+# 查看全局密码 已经显示为空了，说明移除成功
+git config --global user.password
+```
 
