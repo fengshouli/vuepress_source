@@ -1,6 +1,6 @@
-# sql
+# mac安装mysql
 
-# 一.mac安装mysql.
+## 一.mac安装mysql.
 
 [m1芯片的mac的mysql安装](https://blog.csdn.net/qq_42006613/article/details/111773038)
 

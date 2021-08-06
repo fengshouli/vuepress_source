@@ -51,3 +51,5 @@ File-->settings-->Editor-->Color Schema-->Color Schema Font
 
 这里面Size就是大小,一般16就可以了.
 
+## 三.插件.Plugin
+
