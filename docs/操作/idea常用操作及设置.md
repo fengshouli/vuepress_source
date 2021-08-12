@@ -53,3 +53,46 @@ File-->settings-->Editor-->Color Schema-->Color Schema Font
 
 ## 三.插件.Plugin
 
+### 1.GenerateAllSetter
+
+一键调用一个对象的所有的set方法.
+
+### 2.IDE Eval Reset
+
+idea无限重置30天工具,一般新装了需要从网上下载个新的.
+
+### 3.SequenceDiagram
+
+生成时序图的工具.
+
+### 4.SonarLint
+
+代码约束检查工具.
+
+### 5.Atom Material Icons
+
+一款换图标的插件.但是他最重要的用途!!可以提升流畅度.(m1芯片的idea特别卡,换了这个图标后明显变得流畅.)
+
+## 四.新环境需要配置的东西.
+
+### 1.最简单的是从原先的环境先导出个.
+
+## 五.IDEA常见问题解决.
+
+### 1.idea使用lombok后,编译提示找不到符号.
+
+1. 打开enable Annotation processing
+
+   ![lombok找不到符号解决](./picture/idea/lombok_problem.jpeg)  
+
+
+
+2. 增加如下配置  
+
+​    `-Djps.track.ap.dependencies=false`
+
+![problem](./picture/idea/lombok_problem1.png)
+
+
+
+3. 如果还没有解决,确保lombok插件和idea版本对应,并且项目中的lombok.jar版本不能过低.或者升级到高版本.

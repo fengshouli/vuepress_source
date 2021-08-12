@@ -1,6 +1,6 @@
-# 工作经验
+# Java开发-工作经验
 
-## 1.对一张很大的数据库表所有数据进行操作.(千万级别)
+## 一.对一张很大的数据库表所有数据进行操作.(千万级别)
 
 > 1. 如果对一张很大的数据库表进行操作时候,程序是先将所有数据加载到内存,再操作.如果操作不慎,极容易造成内存溢出问题.  
 >
@@ -104,7 +104,108 @@ public List<User> findAll() {
 
 
 
+## 二.借助Spring,统一接口动态调用不同的实现.
 
+### 1.核心,service容器
 
+核心思想是,在程序启动的时候,就将所有的`service`收集起来到容器中,在用的时候,让`spring`帮忙注入进来.
 
+```java
+//  spring会将所有实现了IService的接口都收集到servicsMap中,key是注解中的字符串.
+@Service
+public class ServiceContext {
+    @Autowired
+    Map<String, IService> servicsMap;
+
+    public IService getService(String type) {
+        return servicsMap.get(type);
+    }
+}
+```
+
+### 2.定义公共接口 `IService`
+
+```java
+public interface IService {
+  	//参数
+    List getList(HashMap<String, Object> params);
+		//加了default的方法,可以不被强制实现
+    default String getJumpUrl(HashMap<String, Object> params) {
+        return "";
+    }
+}
+```
+
+### 3.定义一个Controller,用来接收前端打来的请求.
+
+```java
+@Controller
+@RequestMapping("/xxx")
+public class Controller {
+
+    // 注入service容器,
+    @Autowired
+    ServiceContext serviceContext;
+
+    /**
+     * 一些前端参数接收,
+     taskType决定了你去调用哪个service
+     */
+    @ResponseBody
+    @RequestMapping(value = "/xxx/{taskType}")
+    public ResultDto queryProjectIncomeWarningList(
+            @PathVariable String taskType,
+            @RequestBody HashMap<String, Object> bodyParams
+    ){
+        IService service = serviceContext.getService(taskType);
+        list = service.getList(bodyParams);
+
+        ResultDto resultDto = resultDto.builder()
+                .status(status)
+                .data(list.toArray())
+                .msg(msg)
+                .url(service.getJumpUrl(bodyParams))//跳转url.如果有
+                .build();
+        return resultDto;
+    }
+}
+```
+
+### 4.这里的返回结果是用了个建造者模式.
+
+```java
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class WarningResultDto {
+    @NonNull
+    //status,必选, 执行结果： 0：失败；1：成功；
+    private int status;
+
+    //data,非必选 类型Array,业务放自定义结果集字段
+    private Object[] data;
+
+    //msg,非必选,异常信息.
+    private String msg;
+
+    //url:非必选,跳转url.
+    private String url;
+}
+```
+
+### 5.创造service的实现.
+
+```java
+@Service("ser1")
+public class Service1 implements IPreWarningService {
+		//当controller的taskType传"ser1",就会走这个service.
+}
+
+@Service("ser2")
+public class Service2 implements IPreWarningService {
+		//当controller的taskType传"ser2",就会走这个service.
+}
+```
 
