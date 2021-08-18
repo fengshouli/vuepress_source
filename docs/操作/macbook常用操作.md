@@ -37,3 +37,21 @@ command+shift+.
 ![](./picture/macbook/power2.png)
 
 选择应用到包含的项目.这样权限就会下放到每个文件.现在就已经有权限了.
+
+## 五.关闭占用的端口号.
+
+### 1.查看是那个进程占用了端口.
+
+```sh
+lsof -i:3003
+-----------会得到这样一串结果
+COMMAND   PID       USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
+node    49288 fengshouli   30u  IPv6 0x418a25fd49ccb593      0t0  TCP *:cgms (LISTEN)
+```
+
+### 2.将进程关闭
+
+```sh
+kill 49288
+```
+

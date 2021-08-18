@@ -555,3 +555,35 @@ git config --global --unset user.password
 git config --global user.password
 ```
 
+## 十二.git合并代码.Ds_Store冲突.
+
+### 1.首先可以删除一个git项目下的所有.Ds_Store文件.
+
+注意一定要先进入到git目录下再执行下面的语句.
+
+```sh
+find . -name .DS_Store -print0 | xargs -0 git rm -f --ignore-unmatch
+```
+
+使用以下命令删除当前目录及子目录的所有.Ds_Store文件.
+
+```sh
+find . -name '*.DS_Store' -type f -delete
+```
+
+### 2.创建.gitignore文件,胡烈Ds_Store文件.
+
+### 3.禁用或启用自动生成
+
+#### 禁止.DS_store生成：
+
+```sh
+defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool TRUE
+```
+
+#### 恢复.DS_store生成：恢复.DS_store生成：
+
+```sh
+defaults delete com.apple.desktopservices DSDontWriteNetworkStores
+```
+

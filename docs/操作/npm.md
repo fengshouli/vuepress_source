@@ -12,6 +12,8 @@
 
 [npm菜鸟教程](https://www.runoob.com/nodejs/nodejs-npm.html)
 
+[node的国内下载地址](http://nodejs.cn/download/current/)
+
 ## 问题.
 
 ### 一.下载很慢
@@ -34,6 +36,12 @@
 
    ```shell
    npm install --registry=https://registry.npm.taobao.org
+   ```
+
+4. 删除换源:
+
+   ```shell
+   npm config delete registry
    ```
 
    
