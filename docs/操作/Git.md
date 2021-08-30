@@ -571,7 +571,7 @@ find . -name .DS_Store -print0 | xargs -0 git rm -f --ignore-unmatch
 find . -name '*.DS_Store' -type f -delete
 ```
 
-### 2.创建.gitignore文件,胡烈Ds_Store文件.
+### 2.创建.gitignore文件,忽略Ds_Store文件.
 
 ### 3.禁用或启用自动生成
 
