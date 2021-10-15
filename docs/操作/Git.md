@@ -587,3 +587,104 @@ defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool TRUE
 defaults delete com.apple.desktopservices DSDontWriteNetworkStores
 ```
 
+## 十三.git提交错了怎么办
+
+### 1.git add 添加 多余文件
+
+这样的错误是由于， 有的时候 可能
+
+* git add . （空格+ 点） 表示当前目录所有文件，不小心就会提交其他文件
+* git add 错了某个文件
+
+撤销操作
+
+git status 先看一下add 中的文件
+
+![](./picture/git/git_reset1.jpg)
+
+git reset HEAD 如果后面什么都不跟的话 就是上一次add 里面的全部撤销了
+
+```sh
+git reset head
+```
+
+git reset HEAD XXX/XXX/XXX.java 就是对某个文件进行撤销了
+
+```sh
+git reset head scripts/mysql/base/DDL/b.sql 
+```
+
+### 2.git commit 错误
+
+如果不小心 弄错了 git add后 ， 又 git commit 了。需要撤回的情况.
+
+1. 先使用`git log`查看节点
+
+   ![](./picture/git/git_reset2.jpg)
+
+2. 找到上一个正常的版本.然后执行下面的命令
+
+   ```sh
+   git reset commit_id
+   例如:
+   git reset 0da386043f1b31cb73692e1850deadab34cb3532
+   ```
+
+git reset commit_id （回退到上一个 提交的节点 代码还是原来你修改的）
+git reset –hard commit_id （回退到上一个commit节点， 代码也发生了改变，变成上一次的）
+
+注意,如果你是新add的文件,在回滚后会变成未add的文件.如果你是旧文件修改,则无add的影响.
+
+### 3.如果要是提交了以后，可以使用 git revert
+
+还原已经提交的修改
+此次操作之前和之后的commit和history都会保留，并且把这次撤销作为一次最新的提交
+git revert HEAD 撤销前一次 commit
+git revert HEAD^ 撤销前前一次 commit
+git revert commit-id (撤销指定的版本，撤销也会作为一次提交进行保存）
+git revert是提交一个新的版本，将需要revert的版本的内容再反向修改回去，版本会递增，不影响之前提交的内容。
+
+### 4.git,merge错了怎么办
+
+**方法一**，reset 到 merge 前的版本，然后再重做接下来的操作，要求每个合作者都晓得怎么将本地的 HEAD 都回滚回去：
+
+```sh
+$ git checkout 【merge后所在的分支】
+$ git reset --hard 【merge前的版本号】
+```
+
+**方法二**，当 merge 以后还有别的操作和改动时，git 正好也有办法能撤销 merge，用 git revert：
+
+```sh
+$ git revert -m 【要撤销的那条merge线的编号，从1开始计算（怎么看哪条线是几啊？）】 【merge前的版本号】
+Finished one revert.
+[master 88edd6d] Revert "Merge branch 'jk/post-checkout'"
+ 1 files changed, 0 insertions(+), 2 deletions(-)
+```
+
+这样会创建新的 commit 来抵消对应的 merge 操作，而且以后 git merge 【那个编号所代表的分支】 会提示：
+
+```applescript
+Already up-to-date.
+```
+
+因为使用方法二会让 git 误以为这个分支的东西都是咱们不想要的。
+
+**方法三**，怎么撤销方法二：
+
+```sh
+$ git revert 【方法二撤销merge时提交的commit的版本号，这里是88edd6d】
+Finished one revert.
+[master 268e243] Revert "Revert "Merge branch 'jk/post-checkout'""
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+```
+
+这样就行了，可以正常 merge 了，不过可能会有很多冲突噢！！
+
+```sh
+$ git merge jk/post-checkout
+Auto-merging test.txt
+Merge made by recursive.
+ test.txt |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+```
