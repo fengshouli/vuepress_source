@@ -55,3 +55,10 @@ node    49288 fengshouli   30u  IPv6 0x418a25fd49ccb593      0t0  TCP *:cgms (LI
 kill 49288
 ```
 
+## 六.查看ip端口
+
+控制台打开:输入 
+```sh
+ifconfig en0
+```
+即可查看.

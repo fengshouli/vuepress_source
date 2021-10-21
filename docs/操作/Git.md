@@ -688,3 +688,12 @@ Merge made by recursive.
  test.txt |    1 +
  1 files changed, 1 insertions(+), 0 deletions(-)
 ```
+
+### 5.git,merge的时候,误点了Rebase current on selected 怎么办?
+
+```sh
+git rebase  --abort 
+根据提示,看看需不需要:
+rm -fr ".git/rebase-merge"
+```
+
