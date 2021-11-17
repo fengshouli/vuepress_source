@@ -23,7 +23,7 @@ module.exports = {
             
         ],
         sidebar: {
-            "/java/":["","代码规范","java_base","execption","lambda","juc","Kafka","设计模式","Redis","spring","SpringBoot","SpringCloud","总结的题目"],
+            "/java/":["","代码规范","java_base","execption","lambda","juc","JVM","Kafka","设计模式","Redis","spring","SpringBoot","SpringCloud","总结的题目"],
             "/数据库/":["","数据库操作","mysql"],
             "/操作/":["","Git","github-CICD","npm","Maven","sql","other","软件插件安装","macbook常用操作","idea常用操作及设置"],
             "/工作经验/":["","实用的类","problem","experience","知识积累"],
