@@ -714,7 +714,6 @@ html页面中写入如下代码：
     <p th:text="'small smile'+',very good.' + ${userName}">浅浅的微笑</p>
     ```
   
-    
 - 算数操作 Arithmetic operations:
   - Binary operators: `+`, `-`, `*`, `/`, `%`
   
@@ -732,7 +731,6 @@ html页面中写入如下代码：
     <p th:text="100-${age}"></p>
     ```
   
-    
 - 布尔操作 Boolean operations:
   - 布尔操作符 Binary operators: `and`, `or`
   
@@ -753,7 +751,6 @@ html页面中写入如下代码：
     <p th:if="${age}&lt;18">未成年</p>
     ```
   
-    
 - 比较和相等 Comparisons and equality:
   - 比较符 Comparators: `>`, `<`, `>=`, `<=` (`gt`, `lt`, `ge`, `le`)
   
@@ -767,7 +764,6 @@ html页面中写入如下代码：
     <p th:if="not(${isMarry})">not(false)</p>
     ```
   
-    
 - 条件操作符 Conditional operators:
   - If-then: `(if) ? (then)`
   
@@ -791,7 +787,6 @@ html页面中写入如下代码：
     <p th:class="${isMarry}?'css2':'css3'">已婚</p>
     ```
   
-    
 - 特殊符号 Special tokens:
   
   - 无操作符 No-Operation: `_`
@@ -2577,3 +2572,113 @@ public interface UserRepository extends JpaRepository<User, Long> {
 User findByEmailAddress(String emailAddress);
 ```
 
+## 九.springboot监听
+
+### 1.目前spring boot中支持的事件类型
+
+1. ApplicationFailedEvent：该事件为spring boot启动失败时的操作
+2. ApplicationPreparedEvent：上下文context准备时触发
+3. ApplicationReadyEvent：上下文已经准备完毕的时候触发
+4. ApplicationStartedEvent：spring boot 启动监听类
+5. SpringApplicationEvent：获取SpringApplication
+6. ApplicationEnvironmentPreparedEvent：环境事先准备
+
+### 2.示例--给实现某个接口/抽象类的子类重新赋serviceName
+
+最常用的就是`ApplicationReadyEvent`事件了.
+
+1. 先创建个父类,并有子类继承
+
+```java
+///抽象父类///////////////////////////////////////////////////////////////
+@Component
+public abstract class ProjectTaskState {
+    public void updateTaskState(UpdateStateParamDto updateStateParamDto) {
+        //1.做事情1
+        do1();
+        //2.干各自的操作
+        specialOperation(updateStateParamDto.getTaskId());
+    }
+  
+  	public void do1() {
+        //1.做事情1
+    }
+
+  	//子类实现
+    protected abstract void specialOperation(long taskId);
+
+    /**
+     * 指定service的名字
+     * @return 返回状态枚举类中某个枚举值的serviceCode.
+     */
+    public abstract String getAppointServiceName();
+
+}
+
+///子类1///////////////////////////////////////////////////////////////
+@Service
+public class NotStartState extends ProjectTaskState {
+    @Override
+    protected void specialOperation(long taskId) {}
+
+    @Override
+    public String getAppointServiceName() {
+        return ProjectScheduleStatus.UNABLE.getServiceCode();
+    }
+}
+///子类2///////////////////////////////////////////////////////////////
+@Service
+public class IngState extends ProjectTaskState {
+    @Override
+    protected void specialOperation(long taskId) {
+        updateTaskStateOfId(taskId);
+    }
+
+    @Override
+    public String getAppointServiceName() {
+        return ProjectScheduleStatus.ING.getServiceCode();
+    }
+
+    private void updateTaskStateOfId(long taskId) {
+        this.projectScheduleService.afreshProjectScheduleCompletionOfTaskId(taskId);
+    }
+}
+
+
+```
+
+2.自己写个类,实现ApplicationListener接口,泛型传入某个事件,
+
+```java
+@Service
+public class TaskStateContainer implements ApplicationListener<ApplicationReadyEvent> {
+    private final Map<String, ProjectTaskState> taskStateMap = new HashMap<>();
+
+    public ProjectTaskState getTaskState(String serviceCode) {
+        return taskStateMap.get(serviceCode);
+    }
+
+    /**
+     * 初始化各个状态.
+     * 指定服务名,装载到容器中.
+     * @param event
+     */
+    @Override
+    public void onApplicationEvent(ApplicationReadyEvent event) {
+        ApplicationContext applicationContext = event.getApplicationContext();
+      	//先拿到所有继承/实现了ProjectTaskState.class的子类,没指定serviceName的,为类名首字母小写.
+        Map<String, ProjectTaskState> stateMap = applicationContext.getBeansOfType(ProjectTaskState.class);
+        if(stateMap == null || stateMap.isEmpty()){
+            return;
+        }
+        for(Map.Entry<String, ProjectTaskState> entry : stateMap.entrySet()){
+          	//抽象父类中的抽象方法可以被直接调用.
+            String appointServiceName = entry.getValue().getAppointServiceName();
+          	//注意这里一定不能重新创建.例如,entry.getValue().getClass().newInstance();否则放进去的就是空的,
+            ProjectTaskState projectTaskState = entry.getValue();
+          	//通过手动命名的方法来重新覆盖serviceName
+            taskStateMap.put(appointServiceName,projectTaskState);
+        }
+    }
+}
+```
