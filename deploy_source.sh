@@ -9,4 +9,3 @@ sleep 1s
 # git push -f git@github.com:fengshouli/vuepress_source.git master
 git push origin master
 echo "完成"
-cd -
