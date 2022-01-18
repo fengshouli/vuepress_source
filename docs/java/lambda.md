@@ -205,8 +205,7 @@ stats.getSum();
 #### 1.将一个`List<TestObj>`抽取某个字段组成新`List<String>`字段并去重
 
 ```java
-List<String> pids = objs.stream().map(TestObj::getPid).collect(Collectors.toList())
-                .stream().distinct().collect(Collectors.toList());
+List<String> pids = objs.stream().map(TestObj::getPid).distinct().collect(Collectors.toList());
 System.out.println("pids===="+pids);
 //pids====[1, 2, 3]
 ```
