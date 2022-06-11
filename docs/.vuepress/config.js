@@ -12,18 +12,66 @@ module.exports = {
         nav: [
             { text: '首页', link: '/' },
             { text: '操作', link: '/操作/' },
-            { text:'工作经验', link: '/工作经验/'},
-            { text:'项目经验', link: '/项目经验/'},
-            { text: 'java知识', link: '/java/' },
+            { 
+                text: '经验',
+                items:[
+                    { text: '工作经验', link: '/工作经验/'},
+                    { text: '项目经验', link: '/项目经验/'}
+                ] 
+            },
+            {
+                text:"技术相关",
+                items:[
+                    { 
+                        text: 'java技术', 
+                        items:[
+                            {
+                                text:"java",
+                                link: '/java/' 
+                            },
+                            {
+                                text:"mockito",
+                                link:"https://github.com/hehonghui/mockito-doc-zh#0"
+                            },
+                            {
+                                text:"mockito详解",
+                                link:"https://blog.csdn.net/xiao__jia__jia/article/details/115252780"
+                            }
+                        ]
+                        
+                    },
+                    { text: '数据库技术', link: '/数据库/' },
+                ]
+            },
+            { text: '架构之路', link: '/架构之路/' },
             { text: '领域驱动设计', link: '/领域驱动设计/' },
-            { text: '数据库知识', link: '/数据库/' },
+        
             { text: '源码解析', link: '/源码解析/' },
             { text: '程序员英语', link: '/程序员英语/' },
             { text: '算法体系', link: '/算法体系/' },
+            {
+                text: '下拉目录测试',
+                items:[
+                    {text:'具体.md文档', link: '/guide/ts/'},// 以 ‘/’结束，默认读取 README.md
+                    {text:'文件夹下Readme', link: '/guide/vue/test03'}, // 可不写后缀 .md
+                    {text:'其他连接测试-百度链接', link: 'https://www.baidu.com/'}// 外部链接
+                ]
+            },
             { text: '用友', link: '/用友/' }
             
         ],
+      
         sidebar: {
+            "/架构之路/":[
+                {
+                    title:"架构师的自我修炼",
+                    children:["架构师的自我修炼/程序设计修炼","架构师的自我修炼/架构方法修炼"]
+                }
+                ,{
+                    title:"中台架构及实现-基于DDD和微服务",
+                    children:["中台架构及实现/中台实现"]
+                }
+            ],
             "/java/":["","代码规范","java_base","execption","lambda","juc","JVM","Kafka","设计模式","Redis","spring","SpringBoot","SpringCloud","总结的题目"],
             "/领域驱动设计/":["","实体","值对象","领域服务"],
             "/数据库/":["","数据库操作","mysql"],
