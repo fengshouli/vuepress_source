@@ -72,7 +72,7 @@ module.exports = {
                     children:["中台架构及实现/中台实现"]
                 }
             ],
-            "/java/":["","代码规范","java_base","execption","lambda","juc","JVM","Kafka","设计模式","Redis","spring","SpringBoot","SpringCloud","总结的题目"],
+            "/java/":["","代码规范","java_base","execption","lambda/Lambda表达式","juc","JVM","Kafka","设计模式","Redis","spring","SpringBoot","SpringCloud","总结的题目"],
             "/领域驱动设计/":["","实体","值对象","领域服务"],
             "/数据库/":["","数据库操作","mysql"],
             "/操作/":["","Git","github-CICD","npm","Maven","sql","other","软件插件安装","macbook常用操作","idea常用操作及设置"],
@@ -81,7 +81,7 @@ module.exports = {
             "/源码解析/":["","springboot源码解析"],
             "/程序员英语/":["","程序员英语"],
             "/算法体系/":["","算法基础"],
-            "/用友/":["","你在哪里","UI模板","编码规则","用友Rule规则","用友调试","其他操作","预警配置"]
+            "/用友/":["","你在哪里","UI模板","领域事件相关","编码规则","用友Rule规则","用友调试","其他操作","预警配置"]
         }
     }
 }
