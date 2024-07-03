@@ -13,7 +13,18 @@ jobs:
     #步骤,uses就是用插件,run就是执行命令.
     steps:
     #checkout插件
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+      # Clear npm cache
+      - name: Clear npm cache
+        run: npm cache clean --force
+
+      # Update npm to the latest version
+      - name: Update npm
+        run: npm install -g npm@latest
       #都这么写.
       - run: npm ci
       #安装咱们要的vuepress组件
