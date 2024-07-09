@@ -94,7 +94,7 @@ public static int process2(int[] arr, int L, int R, int index) {
 
 #### 图例演示过程:为了简单,我直接画的就是排好序的
 
-![image-20240622000804206](/Users/fengshouli/Library/Application Support/typora-user-images/image-20240622000804206.png)
+![image-20240622000804206](./picture/image-20240622000804206.png)
 
 #### 总结:
 
