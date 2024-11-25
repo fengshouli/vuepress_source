@@ -1,2 +1,2 @@
-CD /Users/fengshouli/vuepressWorkspace/vuepress-start
+cd /Users/fengshouli/vuepressWorkspace/vuepress-start
 sh deploy_source.sh
