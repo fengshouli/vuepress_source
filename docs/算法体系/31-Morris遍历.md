@@ -6,18 +6,18 @@ Morris核心思想,在于利用了大量的叶子节点的空闲指针.而不是
 
 ### Morris遍历细节
 
-假设来到当前节点cur，开始时cur来到头节点位置
-1）如果cur没有左孩子，cur向右移动(cur = cur.right)
-2）如果cur有左孩子，找到左子树上最右的节点mostRight：
-	a.如果mostRight的右指针指向空，让其指向cur，
-	然后cur向左移动(cur = cur.left)
-	b.如果mostRight的右指针指向cur，让其指向null，
-	然后cur向右移动(cur = cur.right)
-3）cur为空时遍历停止
+假设来到当前节点cur，开始时cur来到头节点位置   
+1）如果cur没有左孩子，cur向右移动(cur = cur.right)  
+2）如果cur有左孩子，找到左子树上最右的节点mostRight：  
+	a.如果mostRight的右指针指向空，让其指向cur，   
+	然后cur向左移动(cur = cur.left)   
+	b.如果mostRight的右指针指向cur，让其指向null，  
+	然后cur向右移动(cur = cur.right)   
+3）cur为空时遍历停止  
 
-太绕了,我们画个图
+太绕了,我们画个图  
 
-![img](/Users/fengshouli/vuepressWorkspace/vuepress-start/docs/算法体系/morris.gif)
+![img](./picture/morris.gif)
 
 ### Morris遍历实质
 
@@ -28,7 +28,7 @@ morris遍历时间复杂度依然是O(N)
 
 ### Morris序
 
-![image-20240622124545072](/Users/fengshouli/Library/Application Support/typora-user-images/image-20240622124545072.png)
+![image-20240622124545072](./picture/image-20240622124545072.png)
 
 1. cur来到a,==第一次来到a==
 2. 找到左树b最右e,
