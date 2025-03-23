@@ -5,7 +5,10 @@ module.exports = {
     // base: '/',   // 设置站点根路径
     // base:'./',//打包用
     port: 9999,
-    head: [],
+    //适配ipad
+    head: [
+        ['meta', { name: 'viewport', content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' }]
+      ],
     plugins: [],
     themeConfig: {
         sidebarDepth: 2,
