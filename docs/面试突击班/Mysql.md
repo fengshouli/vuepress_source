@@ -253,7 +253,7 @@ So，**Buffer Pool其实是可以支持多实例的**。MySQL支持的。
 
 MySQL中可以基于参数 `innodb_buffer_pool_instances` 去设置Buffer Pool实例的个数，默认是一个，最大可以设置为64个。并且多Buffer Pool实例需要至少给Buffer Pool设置1G的空闲才会生效。
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/2746/1725536056014/9c561fec5ff84eb4914dd084130ac7fb.png)
+![image.png](./pic/9c561fec5ff84eb4914dd084130ac7fb.png)
 
 他是将数据基于hash的形式，分散到不同的Buffer Pool实例中。多个Buffer Pool的数据是不同的！！
 
