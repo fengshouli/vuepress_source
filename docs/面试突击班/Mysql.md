@@ -445,7 +445,7 @@ B账户   5000   +2000    7000
 
 ### **脏读**
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/1463/1650529519068/4bb1fffb1e154ebb804e4a0655a7f988.png)
+![image.png](./pic/4bb1fffb1e154ebb804e4a0655a7f988.png)
 
 大家看一下，我们有两个事务，一个是 Transaction A，一个是 Transaction B，在第一个事务里面，它首先通过一个 where id=1 的条件查询一条数据，返回 name=Ada，age=16 的这条数据。然后第二个事务呢，它同样地是去操作 id=1 的这行数据，它通过一个 update 的语句，把这行 id=1 的数据的 age 改成了 18，但是大家注意，它没有提交。
 
@@ -453,7 +453,7 @@ B账户   5000   +2000    7000
 
 ### **不可重复读**
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/1463/1650529519068/de52616964874baa81b0943efbbf37c2.png)
+![image.png](./pic/de52616964874baa81b0943efbbf37c2.png)
 
 ```
 同样是两个事务，第一个事务通过 id=1 查询到了一条数据。然后在第二个事务里面执行了一个 update 操作，这里大家注意一下，执行了 update 以后它通过一个 commit提交了修改。然后第一个事务读取到了其他事务已提交的数据导致前后两次读取数据不一致的情况，就像这里，age 到底是等于 16 还是 18，那么这种事务并发带来的问题，我们把它叫做不可重复读。
@@ -465,7 +465,7 @@ B账户   5000   +2000    7000
 在第一个事务里面我们执行了一个范围查询，这个时候满足条件的数据只有一条。在第二个事务里面，它插入了一行数据，并且提交了。重点：插入了一行数据。在第一个事务里面再去查询的时候，它发现多了一行数据。
 ```
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/1463/1650529519068/5788f65448664d26b11b8e7dfc14bd30.png)
+![image.png](./pic/5788f65448664d26b11b8e7dfc14bd30.png)
 
 ```
 一个事务前后两次读取数据数据不一致，是由于其他事务插入数据造成的，这种情况我们把它叫做幻读。
@@ -495,7 +495,7 @@ https://dev.mysql.com/doc/refman/5.7/en/innodb-multi-versioning.html
 
 MVCC 的核心思想是： 我可以查到在我这个事务开始之前已经存在的数据，即使它在后面被修改或者删除了。在我这个事务之后新增的数据，我是查不到的。
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/1463/1650529519068/f1ac9b56aafe4ec2980b75d9235613c8.png)
+![image.png](./pic/f1ac9b56aafe4ec2980b75d9235613c8.png)
 
 通过以上演示我们能看到，通过版本号的控制，无论其他事务是插入、修改、删除，第一个事务查询到的数据都没有变化。
 
@@ -698,7 +698,7 @@ WHERE
 查询顺序：course c——teacher t——teacher_contact tc。
 ```
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/1463/1650529519068/d593586ff586400981f2adb63bcbc289.png)
+![image.png](./pic/d593586ff586400981f2adb63bcbc289.png)
 
 ```
 先查课程表，再查老师表，最后查老师联系方式表。子查询只能以这种方式进行，只有拿到内层的结果之后才能进行外层的查询。
@@ -722,7 +722,7 @@ WHERE
 	AND ( c.cid = 2 OR tc.tcid = 3 );
 ```
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/1463/1650529519068/49d0ecd8f4574e78becc64f0cd936b38.png)
+![image.png](./pic/49d0ecd8f4574e78becc64f0cd936b38.png)
 
 ```
 id 值相同时，表的查询顺序是
@@ -756,7 +756,7 @@ id 值相同时，表的查询顺序是
 EXPLAIN SELECT * FROM teacher;
 ```
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/1463/1650529519068/47db5e81facc4838ba5900e0ce4de10a.png)
+![image.png](./pic/47db5e81facc4838ba5900e0ce4de10a.png)
 
 再看一个包含子查询的案例：
 
@@ -770,7 +770,7 @@ WHERE
 	tcid = ( SELECT tcid FROM teacher t WHERE t.tid = ( SELECT c.tid FROM course c WHERE c.cname = 'mysql' ) );
 ```
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/1463/1650529519068/760600fe47e94f8ab13b3b07b260ff48.png)
+![image.png](./pic/760600fe47e94f8ab13b3b07b260ff48.png)
 
 **PRIMARY**
 
@@ -798,7 +798,7 @@ FROM
 	( SELECT * FROM course WHERE tid = 1 UNION SELECT * FROM course WHERE tid = 2 ) cr;
 ```
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/1463/1650529519068/8dcf3937462846cc9db55a9d71cc2074.png)
+![image.png](./pic/8dcf3937462846cc9db55a9d71cc2074.png)
 
 ```
 对于关联查询，先执行右边的 table（UNION），再执行左边的 table，类型是DERIVED
@@ -866,7 +866,7 @@ system 是 const 的一种特例，只有一行满足条件。例如：只有一
 EXPLAIN SELECT * FROM mysql.proxies_priv;
 ```
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/1463/1650529519068/b133a46d7c0a45baac988a9b423fbc43.png)
+![image.png](./pic/b133a46d7c0a45baac988a9b423fbc43.png)
 
 **eq_ref**
 
@@ -928,13 +928,13 @@ ALTER TABLE teacher ADD INDEX idx_tcid (tcid);
 select t.tcid from teacher t,teacher_contact tc where t.tcid = tc.tcid;
 ```
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/1463/1650529519068/5ab70b8ea8b84aa39658b35cd54040c3.png)
+![image.png](./pic/5ab70b8ea8b84aa39658b35cd54040c3.png)
 
 ```
 此时的执行计划（teacher_contact 表是 eq_ref）：
 ```
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/1463/1650529519068/5a0b5fff92264a3881ef9c37d3767c5b.png)
+![image.png](./pic/5a0b5fff92264a3881ef9c37d3767c5b.png)
 
 **小结：**
 
@@ -954,7 +954,7 @@ select t.tcid from teacher t,teacher_contact tc where t.tcid = tc.tcid;
 explain SELECT * FROM teacher where tcid = 3;
 ```
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/1463/1650529519068/f9abe8ad9d3f41ba9e494cdccdc54d5d.png)
+![image.png](./pic/f9abe8ad9d3f41ba9e494cdccdc54d5d.png)
 
 **range**
 
@@ -985,7 +985,7 @@ EXPLAIN SELECT * FROM teacher t WHERE t.tid <3;
 EXPLAIN SELECT * FROM teacher t WHERE tid BETWEEN 1 AND 2;
 ```
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/1463/1650529519068/3176ac79a64143b09ce2e7d6ce8baf8f.png)
+![image.png](./pic/3176ac79a64143b09ce2e7d6ce8baf8f.png)
 
 ```
 IN 查询也是 range（字段有主键索引）
@@ -995,7 +995,7 @@ IN 查询也是 range（字段有主键索引）
 EXPLAIN SELECT * FROM teacher_contact t WHERE tcid in (1,2,3);
 ```
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/1463/1650529519068/69faeecb9a3348b5ab48fe7e0589a637.png)
+![image.png](./pic/69faeecb9a3348b5ab48fe7e0589a637.png)
 
 **index**
 
@@ -1007,7 +1007,7 @@ Full Index Scan，查询全部索引中的数据（比不走索引要快）。
 EXPLAIN SELECT tid FROM teacher;
 ```
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/1463/1650529519068/5dbe9f936b284cf4b21b28038ec80d5d.png)
+![image.png](./pic/5dbe9f936b284cf4b21b28038ec80d5d.png)
 
 **all**
 
@@ -1056,7 +1056,7 @@ ALTER TABLE user_innodb add INDEX comidx_name_phone (name,phone);
 explain select phone from user_innodb where phone='126';
 ```
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/1463/1650529519068/f1a15d07c14d4b0596de93922e47be0c.png)
+![image.png](./pic/f1a15d07c14d4b0596de93922e47be0c.png)
 
 ```
 结论：是有可能的（这里是覆盖索引的情况）。
@@ -1126,7 +1126,7 @@ EXPLAIN SELECT tid FROM teacher ;
 EXPLAIN select * from user_innodb where phone ='13866667777';
 ```
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/1463/1650529519068/898782488d8d423ca0f78298c2247074.png)
+![image.png](./pic/898782488d8d423ca0f78298c2247074.png)
 
 **using filesort**
 
@@ -1147,7 +1147,7 @@ EXPLAIN select * from user_innodb where name ='jim' order by id;
 （order by id 引起）
 ```
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/1463/1650529519068/b3582b8e9ccd472ba8f030638836dd0f.png)
+![image.png](./pic/b3582b8e9ccd472ba8f030638836dd0f.png)
 
 **using temporary**
 
@@ -1303,88 +1303,36 @@ EXPLAIN select t.tid from teacher t join course c on t.tid = c.tid group by t.ti
 
 ### **锁的基本模式——共享锁**
 
-```
 第一个行级别的锁就是我们在官网看到的 Shared Locks （共享锁），我们获取了一行数据的读锁以后，可以用来读取数据，所以它也叫做读锁。而且多个事务可以共享一把读锁。那怎么给一行数据加上读锁呢？
-```
 
-
-```
 我们可以用 select lock in share mode;的方式手工加上一把读锁。
-```
 
-
-```
 释放锁有两种方式，只要事务结束，锁就会自动事务，包括提交事务和结束事务。
-```
-
 
 ### **锁的基本模式——排它锁**
 
-```
 第二个行级别的锁叫做 Exclusive Locks（排它锁），它是用来操作数据的，所以又叫做写锁。只要一个事务获取了一行数据的排它锁，其他的事务就不能再获取这一行数据的共享锁和排它锁。
-```
 
-
-```
 排它锁的加锁方式有两种，第一种是自动加排他锁，可能是同学们没有注意到的：
-```
 
-
-```
 我们在操作数据的时候，包括增删改，都会默认加上一个排它锁。
-```
 
-
-```
 还有一种是手工加锁，我们用一个 FOR UPDATE 给一行数据加上一个排它锁，这个无论是在我们的代码里面还是操作数据的工具里面，都比较常用。
-```
-
-
-```
-释放锁的方式跟前面是一样的。
-```
-
 
 ### **锁的基本模式——意向锁**
 
-```
 意向锁是由数据库自己维护的。
-```
 
-
-```
 也就是说，当我们给一行数据加上共享锁之前，会自动在这张表上面加一个意向共享锁。
-```
 
-
-```
 当我们给一行数据加上排他锁之前，会自动在这张表上面加一个意向排他锁。
-```
 
+反过来说：如果一张表上面至少有一个意向共享锁，说明有其他的事务给其中的某些数据行加上了共享锁。
 
-```
-反过来说：
-```
-
-
-```
-如果一张表上面至少有一个意向共享锁，说明有其他的事务给其中的某些数据行加上了共享锁。
-```
-
-
-```
-如果一张表上面至少有一个意向排他锁，说明有其他的事务给其中的某些数据行加上了排他锁。
-```
-
-
-```
 那么这两个表级别的锁存在的意义是什么呢？第一个，我们有了表级别的锁，在 InnoDB 里面就可以支持更多粒度的锁。它的第二个作用，我们想一下，如果说没有意向锁的话，当我们准备给一张表加上表锁的时候，我们首先要做什么？是不是必须先要去判断有没其他的事务锁定了其中了某些行？如果有的话，肯定不能加上表锁。那么这个时候我们就要去扫描整张表才能确定能不能成功加上一个表锁，如果数据量特别大，比如有上千万的数据的时候，加表锁的效率是不是很低？
-```
 
-
-```
 但是我们引入了意向锁之后就不一样了。我只要判断这张表上面有没有意向锁，如果有，就直接返回失败。如果没有，就可以加锁成功。所以 InnoDB 里面的表锁，我们可以把它理解成一个标志。就像火车上厕所有没有人使用的灯，是用来提高加锁的效率的。
-```
+
 
 
 mysql面试的时候怎么去聊       1天基本的原理     案例    原理  
