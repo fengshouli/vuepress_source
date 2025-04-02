@@ -1,10 +1,12 @@
-# 2、Redis面试题
+
+
+## redis2024-下
 
 ## 1、除了Redis你还知道哪些NoSQL数据库？
 
 NoSQL：Not Only SQL ,本质也是一种数据库的技术，相对于传统数据库技术，它不会遵循一些约束，比如：sql标准、ACID属性，表结构等。
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/5983/1726038514026/2d9246b42612455cba8110c2bac080af.png)
+![image.png](./pic/2d9246b42612455cba8110c2bac080af.png)
 
 **NoSQL优点**
 
@@ -30,7 +32,7 @@ NoSQL：Not Only SQL ,本质也是一种数据库的技术，相对于传统数�
 
 简单的说就是关系型数据库你写好SQL就能在项目中直接用上，但是MongoDB的话你写好sql，必须借助客户端的API去调用。
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/5983/1726038514026/717183af1bb5447e821e565ec53d8975.png)
+![image.png](./pic/717183af1bb5447e821e565ec53d8975.png)
 
 ## 2、如何保证Redis与数据库双写时的数据一致性?
 
@@ -44,7 +46,9 @@ NoSQL：Not Only SQL ,本质也是一种数据库的技术，相对于传统数�
 
 如果是新增数据，数据会直接写到数据库中，不用对缓存做任何操作，此时，缓存中本身就没有新增数据，而数据库中是最新值，此时，缓存和数据库的数据是一致的。
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/5983/1667197328004/5a0bb5a11d0d41648dd390c8fecdc6ec.png)![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/5983/1667197328004/c1723be2ec76469eac667f9210beeede.png)
+![image.png](./pic/5a0bb5a11d0d41648dd390c8fecdc6ec.png)
+
+![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/5983/1667197328004/c1723be2ec76469eac667f9210beeede.png)
 
 **一般出现问题的地方是发生在修改或删除的地方**
 
@@ -66,7 +70,7 @@ NoSQL：Not Only SQL ,本质也是一种数据库的技术，相对于传统数�
 
 这个方案我们一般不考虑。原因是更新缓存成功，更新数据库出现异常了，导致缓存数据与数据库数据完全不一致，而且很难察觉，因为缓存中的数据一直都存在。
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/5983/1726038514026/4be699780a724fefa18d61f8cd466e5f.png)
+![image.png](./pic/4be699780a724fefa18d61f8cd466e5f.png)
 
 ##### 2、先更新DB，再更新缓存
 
@@ -84,7 +88,7 @@ NoSQL：Not Only SQL ,本质也是一种数据库的技术，相对于传统数�
 
 *这就出现请求A**更新缓存应该比请求B**更新缓存早才对，但是因为网络等原因，B**却比A**更早更新了缓存。这就导致了脏数据，因此不考虑。*
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/5983/1726038514026/36efd446106d418cab2b9eff11c77b4e.png)
+![image.png](./pic/36efd446106d418cab2b9eff11c77b4e.png)
 
 #### 删除缓存类
 
@@ -102,7 +106,7 @@ NoSQL：Not Only SQL ,本质也是一种数据库的技术，相对于传统数�
 
 5、那么这时候就会产生数据库和 Redis 数据不一致的问题。
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/5983/1726038514026/fe1da141bc30458db0ab752043851e44.png)
+![image.png](./pic/fe1da141bc30458db0ab752043851e44.png)
 
 如何解决呢？其实最简单的解决办法就是延时双删的策略。就是
 
@@ -131,7 +135,7 @@ redis.delKey(X)
 
 ##### Mysql读写分离架构下的延时双删（先更新DB，后删除缓存）
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/5983/1726038514026/d0d2c8a31b33446297d562ffb9ac9aa9.png)
+![image.png](./pic/d0d2c8a31b33446297d562ffb9ac9aa9.png)
 
 ## 3、Redis的持久化的几种方式？如何选择
 
@@ -156,37 +160,39 @@ bgsave：创建一个子进程，专门用于写入 RDB 文件，避免了主线
 
 命令实战演示
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/5983/1663570141014/ab097682d50b4b5d8b6e5046b990000d.png)
+![image.png](./pic/ab097682d50b4b5d8b6e5046b990000d.png)
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/5983/1663570141014/7f4d4eaa5daa4bfa9f73dac0feafa985.png)
+![image.png](./pic/7f4d4eaa5daa4bfa9f73dac0feafa985.png)
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/5983/1663570141014/cc284f936af741808963a29386e505ca.png)![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/5983/1663570141014/81c4dfc0ca4e411e8a95dfa4eaf53f93.png)
+![image.png](./pic/cc284f936af741808963a29386e505ca.png)
+
+![image.png](./pic/81c4dfc0ca4e411e8a95dfa4eaf53f93.png)
 
 除了执行命令手动触发之外，Redis内部还存在自动触发RDB 的持久化机制，例如以下场景:
 
 1)使用save相关配置,如“save m n”。表示m秒内数据集存在n次修改时，自动触发bgsave。
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/5983/1663570141014/f05c9dc4808f4d5197058962036a6680.png)
+![image.png](./pic/f05c9dc4808f4d5197058962036a6680.png)
 
 2）如果从节点执行全量复制操作，主节点自动执行bgsave生成RDB文件并发送给从节点。
 
 3)执行debug reload命令重新加载Redis 时，也会自动触发save操作。
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/5983/1663570141014/ab4880174f914059843d220ca91a89bf.png)
+![image.png](./pic/ab4880174f914059843d220ca91a89bf.png)
 
 4）默认情况下执行shutdown命令时，如果没有开启AOF持久化功能则自动执行bgsave。
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/5983/1663252342001/a066e0616af6479cb29e109feae91482.png)
+![image.png](./pic/a066e0616af6479cb29e109feae91482.png)
 
 关闭RDB持久化，在课程讲述的Redis版本（6.2.4）上，是将配置文件中的save配置改为 save “”
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/5983/1663570141014/c0e0254d5db84e60b838984d5482b3a4.png)
+![image.png](./pic/c0e0254d5db84e60b838984d5482b3a4.png)
 
 #### bgsave执的行流程
 
 为了快照而暂停写操作，肯定是不能接受的。所以这个时候，Redis 就会借助操作系统提供的写时复制技术（Copy-On-Write, COW），在执行快照的同时，正常处理写操作。
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/5983/1663570141014/b43882d7ee83429eb8afe0b92fab7ea0.png)
+![image.png](./pic/b43882d7ee83429eb8afe0b92fab7ea0.png)
 
 bgsave 子进程是由主线程 fork 生成的，可以共享主线程的所有内存数据。bgsave 子进程运行后，开始读取主线程的内存数据，并把它们写入 RDB 文件。
 
@@ -216,7 +222,7 @@ RDB文件使用特定二进制格式保存，Redis版本演进过程中有多个
 
 如下图所示，我们先在 T0 时刻做了一次快照（下一次快照是T4时刻），然后在T1时刻，数据块 5 和 8 被修改了。如果在T2时刻，机器宕机了，那么，只能按照 T0 时刻的快照进行恢复。此时，数据块 5 和 8 的修改值因为没有快照记录，就无法恢复了。
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/5983/1663570141014/c9113306297743158cf82baad4fe4329.png)
+![image.png](./pic/c9113306297743158cf82baad4fe4329.png)
 
 所以这里可以看出，如果想丢失较少的数据，那么T4-T0就要尽可能的小，但是如果频繁地执行全量
 快照，也会带来两方面的开销：
@@ -235,17 +241,17 @@ AOF(append only file)持久化:以独立日志的方式记录每次写命令，�
 
 开启AOF功能需要设置配置:appendonly yes，默认不开启。
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/5983/1663570141014/dd28cece52794f988be6675f817582ba.png)
+![image.png](./pic/dd28cece52794f988be6675f817582ba.png)
 
 AOF文件名通过appendfilename配置设置，默认文件名是appendonly.aof。保存路径同RDB持久化方式一致，通过dir配置指定。
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/5983/1663570141014/f9e1a9fd854b4631876b9156187b54d6.png)
+![image.png](./pic/f9e1a9fd854b4631876b9156187b54d6.png)
 
 ### AOF的工作流程
 
 AOF的工作流程主要是4个部分:命令写入( append)、文件同步( sync)、文件重写(rewrite)、重启加载( load)。
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/5983/1663570141014/1ed964de0c46425d8ee02099c098c775.png)
+![image.png](./pic/1ed964de0c46425d8ee02099c098c775.png)
 
 #### 命令写入
 
@@ -268,7 +274,7 @@ Redis使用单线程响应命令，如果每次写AOF文件命令都直接追加
 
 Redis提供了多种AOF缓冲区同步文件策略，由参数appendfsync控制。
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/5983/1663570141014/251fa2902c7549f09ff37a2a1802a3d5.png)
+![image.png](./pic/251fa2902c7549f09ff37a2a1802a3d5.png)
 
 **always**
 
@@ -300,7 +306,7 @@ Redis提供了多种AOF缓冲区同步文件策略，由参数appendfsync控制�
 
 2)旧的AOF文件含有无效命令，如set a 111、set a 222等。重写使用进程内数据直接生成，这样新的AOF文件只保留最终数据的写入命令。
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/5983/1663570141014/1e5236bdea3c4f7d943848ab145b95c8.png)
+![image.png](./pic/1e5236bdea3c4f7d943848ab145b95c8.png)
 
 3）多条写命令可以合并为一个，如:lpush list a、lpush list b、lpush list c可以转化为: lpush list a b c。为了防止单条命令过大造成客户端缓冲区溢出，对于list、set、hash、zset等类型操作，以64个元素为界拆分为多条。
 
@@ -310,11 +316,11 @@ AOF重写过程可以手动触发和自动触发:
 
 手动触发:直接调用bgrewriteaof命令。
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/5983/1663570141014/fe8fa92c17da42ccb7185b022285798e.png)
+![image.png](./pic/fe8fa92c17da42ccb7185b022285798e.png)
 
 自动触发:根据auto-aof-rewrite-min-size和 auto-aof-rewrite-percentage参数确定自动触发时机。
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/5983/1663570141014/66e1ef551e764240b8057b98f1ae5e80.png)
+![image.png](./pic/66e1ef551e764240b8057b98f1ae5e80.png)
 
 auto-aof-rewrite-min-size:表示运行AOF重写时文件最小体积，默认为64MB。
 
@@ -324,7 +330,7 @@ auto-aof-rewrite-percentage  :代表当前AOF 文件空间(aof_currentsize）和
 
 AOF和 RDB 文件都可以用于服务器重启时的数据恢复。redis重启时加载AOF与RDB的顺序是怎么样的呢？
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/5983/1663570141014/edfe68fdaaee4c70a29981f06935eaa5.png)
+![image.png](./pic/edfe68fdaaee4c70a29981f06935eaa5.png)
 
 1，当AOF和RDB文件同时存在时，优先加载AOF
 
@@ -344,7 +350,7 @@ AOF和 RDB 文件都可以用于服务器重启时的数据恢复。redis重启�
 
 通过 `aof-use-rdb-preamble`  配置项可以打开混合开关，yes则表示开启，no表示禁用，默认是禁用的，可通过config set修改
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/5983/1663570141014/2b16c9021dc24f55814b31871c08142a.png)
+![image.png](./pic/2b16c9021dc24f55814b31871c08142a.png)
 
 * 在 `redis.conf`配置文件中同时设置RDB和AOF的持久化参数。
 
@@ -354,13 +360,13 @@ AOF和 RDB 文件都可以用于服务器重启时的数据恢复。redis重启�
 
 该状态开启后，如果执行bgrewriteaof命令，则会把当前内存中已有的数据弄成二进程存放在aof文件中，这个过程模拟了rdb生成的过程，然后Redis后面有其他命令，在触发下次重写之前，依然采用AOF追加的方式
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/5983/1663570141014/b5cf551a351049bf85bbaa278bf7462f.png)
+![image.png](./pic/b5cf551a351049bf85bbaa278bf7462f.png)
 
 #### 重启加载
 
 AOF和 RDB 文件都可以用于服务器重启时的数据恢复。redis重启时加载AOF与RDB的顺序是怎么样的呢？
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/5983/1663570141014/edfe68fdaaee4c70a29981f06935eaa5.png)
+![image.png](./pic/edfe68fdaaee4c70a29981f06935eaa5.png)
 
 1，当AOF和RDB文件同时存在时，优先加载AOF
 
@@ -380,17 +386,17 @@ Redis提供了简单的事务功能，将一组需要一起执行的命令放到
 
 一个客户端
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/5983/1663569981087/97fd31a4f6174421a5d84029172adeb0.png)
+![image.png](./pic/97fd31a4f6174421a5d84029172adeb0.png)
 
 另外一个客户端
 
 在事务没有提交的时查询（查不到数据）
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/5983/1663569981087/c10554292d0f484f9844542243507dda.png)
+![image.png](./pic/c10554292d0f484f9844542243507dda.png)
 
 在事务提交后查询（可以查到数据）
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/5983/1663569981087/96d61976166148d5a82501d41ab4003e.png)
+![image.png](./pic/96d61976166148d5a82501d41ab4003e.png)
 
 可以看到sadd命令此时的返回结果是QUEUED，代表命令并没有真正执行，而是暂时保存在Redis中的一个缓存队列（所以discard也只是丢弃这个缓存队列中的未执行命令，并不会回滚已经操作过的数据，这一点要和关系型数据库的Rollback操作区分开）。
 
@@ -402,7 +408,7 @@ Redis提供了简单的事务功能，将一组需要一起执行的命令放到
 
 1、语法命令错误
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/5983/1663569981087/6a8f067ba0aa4f6f9c05daac92009ae4.png)
+![image.png](./pic/6a8f067ba0aa4f6f9c05daac92009ae4.png)
 
 例如下面操作错将set写成了sett，属于语法错误，会造成整个事务无法执行，事务内的操作都没有执行:
 
@@ -410,19 +416,19 @@ Redis提供了简单的事务功能，将一组需要一起执行的命令放到
 
 例如：事务内第一个命令简单的设置一个string类型，第二个对这个key进行sadd命令，这种就是运行时命令错误，因为语法是正确的:
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/5983/1663569981087/3ffb4765103b4f0db006d96554825f81.png)
+![image.png](./pic/3ffb4765103b4f0db006d96554825f81.png)
 
 可以看到Redis并不支持回滚功能，第一个set命令已经执行成功,开发人员需要自己修复这类问题。
 
 ### Redis的事务的工作原理
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/5983/1726038514026/f64f06459e0e4b998204e258abc49902.png)
+![image.png](./pic/f64f06459e0e4b998204e258abc49902.png)
 
 ## 5、讲一讲Redis五大数据类型底层实现！
 
 底层数据结构一共有 7 种，分别是简单动态字符串、双向链表、压缩列表、哈希表、跳表和整数数组、快速列表。它们和数据类型的对应关系如下图所示。也就是Redis基础数据结构每一种底层都对应至少2种及以上的实现。
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/5983/1692340041074/d4dc3d3a0ef74c228294b9ebeb782354.png)
+![image.png](./pic/d4dc3d3a0ef74c228294b9ebeb782354.png)
 
 ### 简单动态字符串（Simple Dynamic String）
 
@@ -440,7 +446,7 @@ SDS 与 C 字符串有所不同，它不仅可以保存文本数据，还可以�
 
 **老版本（3.2之前）**
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/5983/1691981125026/090539c149584cc786c1f477b0a1332d.png)
+![image.png](./pic/090539c149584cc786c1f477b0a1332d.png)
 
 ```
 /*
@@ -471,7 +477,7 @@ struct sdshdr {
 
 sdshdr5结构如下：
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/5983/1691981125026/db7fda14b0e74479bf260230b9c9d425.png)
+![image.png](./pic/db7fda14b0e74479bf260230b9c9d425.png)
 
 sdshdr5的结构中flags是一个char，其中低3位要标识type类型（就是存储的格式），所有就只有5位来存储len这个长度，所以就叫做sdshdr5
 
@@ -488,27 +494,27 @@ struct sdshdr5 {
 
 Redis的sdshdr5相对于sdshdr8少两个字段，是为了节省内存空间和提高处理短字符串的效率。根据字符串的长度范围选择适合的sdshdr结构，可以优化内存利用和性能。
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/5983/1691981125026/cf47afd2dc1c4b08965b12c21a36d76e.png)
+![image.png](./pic/cf47afd2dc1c4b08965b12c21a36d76e.png)
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/5983/1691981125026/348e52bebd7a4c7dbd8e03a692515d67.png)
+![image.png](./pic/348e52bebd7a4c7dbd8e03a692515d67.png)
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/5983/1691981125026/426b0547b7fb46a5a032688d114d7553.png)
+![image.png](./pic/426b0547b7fb46a5a032688d114d7553.png)
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/5983/1691981125026/9d3de4a64478427e991ee498d283b2f1.png)
+![image.png](./pic/9d3de4a64478427e991ee498d283b2f1.png)
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/5983/1691981125026/ce80d340d9c745a0a760f6b8db243c00.png)
+![image.png](./pic/ce80d340d9c745a0a760f6b8db243c00.png)
 
 从String的设计上来看，Redis已经把空间利用做到了极致，同时的也可以从sdshdr5到sdshdr8...看出设计原则：开闭原则，对修改关闭，对拓展开放。
 
 ### List
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/5983/1692340041074/d4dc3d3a0ef74c228294b9ebeb782354.png)
+![image.png](./pic/d4dc3d3a0ef74c228294b9ebeb782354.png)
 
 ### 压缩列表
 
 压缩列表实际上类似于一个数组，数组中的每一个元素都对应保存一个数据。和数组不同的是，压缩列表在表头有三个字段 zlbytes、zltail 和 zllen，分别表示列表长度、列表尾的偏移量和列表中的 entry 个数；压缩列表在表尾还有一个 zlend，表示列表结束。
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/5983/1699863678019/f1c2020d937f474b815834153913a5e5.png)
+![image.png](./pic/f1c2020d937f474b815834153913a5e5.png)
 
 在压缩列表中，如果我们要查找定位第一个元素和最后一个元素，可以通过表头三个字段的长度直接定位，复杂度是 O(1)。而查找其他元素时，就没有这么高效了，只能逐个查找，此时的复杂度就是 O(N) 了。
 
@@ -531,7 +537,7 @@ Redis的sdshdr5相对于sdshdr8少两个字段，是为了节省内存空间和�
 
 （链表只能逐一查找元素，导致操作起来非常缓慢，于是就出现了跳表）
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/5983/1699863678019/b19809b301484521847dc63bfab5daf3.png)
+![image.png](./pic/b19809b301484521847dc63bfab5daf3.png)
 
 如果我们要在链表中查找 33 这个元素，只能从头开始遍历链表，查找 6 次，直到找到 33为止。此时，复杂度是 O(N)，查找效率很低
 
@@ -539,11 +545,11 @@ Redis的sdshdr5相对于sdshdr8少两个字段，是为了节省内存空间和�
 
 例如，从前两个元素中抽取元素 1 作为一级索引，从第三、四个元素中抽取元素 11 作为一级索引。此时，我们只需要 4 次查找就能定位到元素 33 了
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/5983/1699863678019/d0ab61d856b3441d9578e8d0856f9f71.png)
+![image.png](./pic/d0ab61d856b3441d9578e8d0856f9f71.png)
 
 2、我们还想再快，可以再增加二级索引：从一级索引中，再抽取部分元素作为二级索引。例如，从一级索引中抽取 1、27、100 作为二级索引，二级索引指向一级索引。这样，我们只需要 3 次查找，就能定位到元素 33 了。
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/5983/1699863678019/87db17eb6515477a8dd55d3821962a45.png)
+![image.png](./pic/87db17eb6515477a8dd55d3821962a45.png)
 
 这种本质就是空间换时间的算法。
 
@@ -575,4 +581,4 @@ String 类型的底层实现只有一种数据结构，也就是简单动态字�
 
 当Set类型的元素数量较少（元素数量小于配置的哈希最大压缩列表元素数量限制，默认为512）时，Redis会使用压缩列表（ziplist）来表示Set。当Set类型的元素数量较多时，会使用哈希表（hashtable）来表示Set。
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/5983/1726038514026/5a797c7684864761a3634ff495075618.png)
+![image.png](./pic/5a797c7684864761a3634ff495075618.png)
